@@ -1,0 +1,6 @@
+# window:
+.gitigore
+.idea
+dist/*
+node_modules
+nptaotaosouplugin.dll
