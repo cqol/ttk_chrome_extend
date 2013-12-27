@@ -33,8 +33,8 @@
 
         container.appendChild(script);
     }
-    var jq = chrome.extension.getURL('js/jquery.js'),
-        lf = chrome.extension.getURL('js/loginFrame.js');
+    var jq = chrome.extension.getURL('js/lib/jquery.js'),
+        lf = chrome.extension.getURL('js/login/loginFrame.js');
     load(jq, function () {
         load('http://img.taotaosou.cn/tts-static-6/standalone/livekit.js', function () {
             load(lf);

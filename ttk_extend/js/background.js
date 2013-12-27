@@ -1,4 +1,4 @@
-﻿﻿// namespace defined
+﻿// namespace defined
 var taotaosou = {
     extension: {
         config: {}
@@ -220,12 +220,12 @@ taotaosou.extension.config.readLocalData = function () {
         if (_this.tkData.status === 0) {
             chrome.tabs.getSelected(null, function (data) {
                 if (urlReg.test(data.url)) {
-                    chrome.tabs.executeScript(null, {file: "js/login.js"});
+                    chrome.tabs.executeScript(null, {file: "js/login/login.js"});
                 } else {
                     chrome.tabs.create({
                         url: 'http://www.taotaosou.com'
                     }, function () {
-                        chrome.tabs.executeScript(null, {file: "js/login.js"});
+                        chrome.tabs.executeScript(null, {file: "js/login/login.js"});
                     });
                 }
             });
