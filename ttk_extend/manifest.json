@@ -1,0 +1,36 @@
+﻿{
+    "manifest_version": 2,
+    "plugins": [
+        {
+            "path": "nptaotaosouplugin.dll",
+            "public": true
+        }
+    ],
+    "browser_action": {
+        "default_icon": "icon.png",
+        "default_title": "淘淘搜图搜助手(淘同款)"
+        /*"default_popup": "popup.html"*/
+    },
+    "content_scripts": [
+        {
+            "js": ["jquery.js", "content.js"],
+            "matches": [ "http://*/*" ],
+            "run_at": "document_end"
+        }
+    ],
+    "web_accessible_resources": [
+        "js/loginFrame.js",
+        "js/jquery.js"
+    ],
+    "background": {
+        "page": "background.html"
+    },
+    "description": "淘淘搜图搜助手(淘同款)是畅行淘宝和天猫的强大利器。它通过图像搜索技术为你迅速找出同款或相似款的商品，方便你进行比价和挑选，将省钱进行到底！",
+    "icons": {
+        "128": "icon-128.png"
+    },
+    "name": "淘淘搜图搜助手(淘同款)",
+    "permissions": [ "tabs", "http://*/*", "https://*/*", "cookies", "unlimitedStorage", "storage" ],
+    "version": "2.0",
+    "update_url": "http://clients2.google.com/service/update2/crx"
+}
