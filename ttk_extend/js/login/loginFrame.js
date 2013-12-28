@@ -8,7 +8,7 @@
 (function (window) {
     var delay = null;
     delay = setInterval(function () {
-        console.log(window.LiveKit);
+
         if (window.LiveKit) {
             window.LiveKit.login();
             window.LiveKit.once('session:refreshed', function () {

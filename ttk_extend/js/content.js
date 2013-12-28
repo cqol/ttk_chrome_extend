@@ -18,7 +18,7 @@
         }
     });
 })();
-(function () {
+(function ($) {
     $.ajax({
         url: "http://www.taotaosou.com/uc/isLogin",
         dataType: "json",
@@ -29,16 +29,16 @@
                     status: data.status,
                     id: '',
                     nick: ''
-                }
+                };
             } else {
                 tkData = {
                     status: data.status,
                     id: data.user.id,
                     nick: data.user.nick
-                }
+                };
             }
             chrome.extension.sendRequest(tkData);
             localStorage.setItem('TK-user-data', JSON.stringify(tkData));
         }
     });
-})();
+})(jQuery);
