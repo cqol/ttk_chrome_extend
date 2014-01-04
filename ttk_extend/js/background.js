@@ -233,5 +233,4 @@ taotaosou.extension.config.readLocalData = function () {
             chrome.browserAction.setPopup({popup: "popup.html"});
         }
     }
-    //chrome-extension://afbofholdapmkfkmochmelniccobdnbp/background.html
 })(window, jQuery);

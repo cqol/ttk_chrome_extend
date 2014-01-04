@@ -1,10 +1,3 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: cqol_77
- * Date: 13-12-3
- * Time: 下午3:42
- * To change this template use File | Settings | File Templates.
- */
 (function (window, undefined) {
     //alert(location.href);
     function load(url, callback) {
