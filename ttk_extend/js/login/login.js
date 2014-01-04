@@ -1,4 +1,4 @@
-(function (window, undefined) {
+(function () {
     //alert(location.href);
     function load(url, callback) {
         var script = document.createElement('script'),

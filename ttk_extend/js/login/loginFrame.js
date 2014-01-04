@@ -1,10 +1,3 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: cqol_77
- * Date: 13-12-4
- * Time: 下午3:32
- * To change this template use File | Settings | File Templates.
- */
 (function (window) {
     var delay = null;
     delay = setInterval(function () {
