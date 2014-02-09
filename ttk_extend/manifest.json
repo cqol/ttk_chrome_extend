@@ -1,7 +1,7 @@
 ﻿{
     "manifest_version": 2,
     "browser_action": {
-        "default_icon": "img/icon.png",
+        "default_icon": "img/icon-non.png",
         "default_title": "淘淘搜比价(淘同款)"
     },
     "content_scripts": [
@@ -9,14 +9,20 @@
             "js": ["js/lib/jquery.js", "js/content.js"],
             "matches": [ "http://*/*" ],
             "run_at": "document_end"
-        }
+        } ,	
+	    {
+            "js": ["js/content_start.js"],
+            "matches": [ "http://*.taotaosou.com/*" ],
+            "run_at": "document_start"
+        }	
     ],
+
     "web_accessible_resources": [
         "js/login/loginFrame.js",
         "js/lib/jquery.js"
     ],
     "background": {
-        "page": "background.html"
+        "page": "html/background.html"
     },
     "description": "淘淘搜比价(淘同款)是畅行淘宝和天猫的强大利器。它通过图像搜索技术为你迅速找出同款或相似款的商品，方便你进行比价和挑选，将省钱进行到底！",
     "icons": {
@@ -24,6 +30,6 @@
     },
     "name": "淘淘搜比价(淘同款)",
     "permissions": [ "tabs", "http://*/*", "https://*/*", "cookies", "unlimitedStorage", "storage" ],
-    "version": "1.3.9",
+    "version": "1.4.1",
     "update_url": "http://clients2.google.com/service/update2/crx"
 }
