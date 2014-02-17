@@ -11,8 +11,14 @@
 
         if (window.LiveKit) {
             window.LiveKit.login();
-            window.LiveKit.once('session:refreshed', function () {
-                location.reload();
+            window.LiveKit.once('session:refreshed', function (data) {
+                //location.reload();
+                var vt = document.createEvent("HTMLEvents");
+                vt.initEvent('user_status_login',false, true);
+                var centerJs = document.getElementById("J---TK-load");
+                centerJs.setAttribute('data-userid', data.id);
+                centerJs.dispatchEvent(vt);
+
             });
             window.LiveKit.once('session:error', function () {
                 location.reload();

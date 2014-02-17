@@ -201,21 +201,27 @@ taotaosou.extension.requestHandler = function( request, sender, sendResponse ){
         chrome.browserAction.onClicked.addListener(function () {
             _this.updataIcon();
         });
-        chrome.extension.onRequest.addListener(function (request, sender, sendRequest) {
-		    if (request.command == "cmdUpdateState") {
-				if (request.status === 0) {
-					chrome.browserAction.setPopup({popup: ""});
-					chrome.browserAction.setBadgeText({text: "?"});
-					chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
-					chrome.browserAction.setIcon({path: "../img/icon-non.png"});
-				} else if (request.status === 1) {
-					chrome.browserAction.setBadgeText({text: ""});
-					chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
-					chrome.browserAction.setIcon({path: "../img/icon.png"});
-					chrome.browserAction.setPopup({popup: "html/popup.html"});
-				}
-				localStorage.setItem('TK-user-data', JSON.stringify(request));
-	        }
+        chrome.runtime.onConnect.addListener(function(port) {
+            console.log(chrome.windows);
+            port.postMessage(JSON.parse(localStorage.getItem('TK-user-data')));
+            chrome.extension.onRequest.addListener(function (request, sender, sendRequest) {
+                if (request.command == "cmdUpdateState") {
+                    if (request.status === 0) {
+                        chrome.browserAction.setPopup({popup: ""});
+                        chrome.browserAction.setBadgeText({text: "?"});
+                        chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
+                        chrome.browserAction.setIcon({path: "../img/icon-non.png"});
+                    } else if (request.status === 1) {
+                        chrome.browserAction.setBadgeText({text: ""});
+                        chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
+                        chrome.browserAction.setIcon({path: "../img/icon.png"});
+                        chrome.browserAction.setPopup({popup: "html/popup.html"});
+                    }
+                    localStorage.setItem('TK-user-data', JSON.stringify(request));
+                    port.postMessage(request);
+                }
+            });
+
         });
         if (_this.tkData && _this.tkData.status === 1) {
             _this.socket();

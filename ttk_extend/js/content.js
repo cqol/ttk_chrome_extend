@@ -1,4 +1,4 @@
-﻿(function () {
+﻿(function ($) {
     chrome.extension.sendRequest({"command": "cmdInject"}, function (res) {
         if (document.getElementById('J---TK-load') == null) {
             try {
@@ -18,43 +18,44 @@
                 js.src = "http://re.taotaosou.com/js/_tts_browser_center.js?t=" + dt;
                 document.body.appendChild(js);
 
-                js.addEventListener("user_status_login", function (e) {
-                    chrome.extension.sendRequest({"status": 1});
-                })
                 js.addEventListener("user_status_exit", function (e) {
-                    chrome.extension.sendRequest({"status": 0});
+                    chrome.extension.sendRequest({"command": "cmdUpdateState","status": 0});
                 });
 
+                js.addEventListener("user_status_login", function (e) {
+                    var uId = '';
+                    if (e.srcElement.dataset.userid) {
+                        uId = e.srcElement.dataset.userid;
+                    }
+                    console.log("uid:" + uId);
+
+                    chrome.extension.sendRequest({"command": "cmdUpdateState","status": 1, "id": uId});
+                    localStorage.setItem('TK-user-data', JSON.stringify({"command": "cmdUpdateState","status": 1, "id": uId}));
+                });
+                // for status
+                js.addEventListener("user_status_status", function (e) {
+                    chrome.extension.sendRequest({"command": "cmdUpdateState","status": 2});
+                });
+
+                //taotaosou login
+                $(document).on('session:refreshed', function (data) {
+                    chrome.extension.sendRequest({"command": "cmdUpdateState","status": 1, "id": data.id});
+                    localStorage.setItem('TK-user-data', JSON.stringify({"command": "cmdUpdateState","status": 1, "id": data.id}));
+                })
+                //taotaosou loginOut
+                $(document).on('session:destroyed', function () {
+                    chrome.extension.sendRequest({"command": "cmdUpdateState","status": 0});
+                })
             } catch (err) {
                 console.log(err);
             }
         }
     });
-})();
 
-(function ($) {
-    $.ajax({
-        url: "http://www.taotaosou.com/uc/isLogin",
-        dataType: "json",
-        success: function (data) {
-            var tkData;
-            if (data.status === 0) {
-                tkData = {
-                    command: 'cmdUpdateState',
-                    status: data.status,
-                    id: '',
-                    nick: ''
-                };
-            } else {
-                tkData = {
-                    command: 'cmdUpdateState',
-                    status: data.status,
-                    id: data.user.id,
-                    nick: data.user.nick
-                };
-            }
-            chrome.extension.sendRequest(tkData);
-            localStorage.setItem('TK-user-data', JSON.stringify(tkData));
-        }
+    var port = chrome.runtime.connect({name: "userStatus"});
+    port.onMessage.addListener(function(msg) {
+        console.log('================');
+        console.log(msg);
+        localStorage.setItem('TK-user-data', JSON.stringify(msg));
     });
 })(jQuery);
