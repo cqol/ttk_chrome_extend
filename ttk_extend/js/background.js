@@ -228,17 +228,15 @@ taotaosou.extension.requestHandler = function( request, sender, sendResponse ){
         }
     }
     getData.prototype.socket = function () {
-        var _this = this;
-        var ws = new WebSocket("ws://messagedcg.taotaosou.com:843/"),
-            uid = _this.tkData.id;
+        var ws = new WebSocket("ws://messagedcg.taotaosou.com:843/");
 
         // Set event handlers.
         ws.onopen = function () {
 
-            ws.send('{ "xip": 100001, "data": { "userId": ' + uid + ', "clientId": ' + 7 + ' } }');
+            ws.send('{ "xip": 100001, "data": { "userId": ' + JSON.parse(localStorage.getItem('TK-user-data')).id + ', "clientId": ' + 7 + ' } }');
         };
         ws.onmessage = function (e) {
-            ws.send(' {"xip": 200001, "data": { "notifyId": ' + $.parseJSON(e.data).notifyId + ', "userId": ' + _this.tkData.id + ', "clientId": ' + 7 + ' } } ');
+            ws.send(' {"xip": 200001, "data": { "notifyId": ' + $.parseJSON(e.data).notifyId + ', "userId": ' + JSON.parse(localStorage.getItem('TK-user-data')).id + ', "clientId": ' + 7 + ' } } ');
 
             var data = JSON.parse(e.data), msgList = data.list;
             if (msgList.length === 0) {
@@ -257,14 +255,13 @@ taotaosou.extension.requestHandler = function( request, sender, sendResponse ){
         };
     }
     getData.prototype.updataIcon = function () {
-        var urlReg = new RegExp(/^http:.*$/),
-            _this = this;
+        var urlReg = new RegExp(/^http:.*$/);
         chrome.browserAction.setPopup({popup: ""});
         //点击埋点
         $.ajax({
             url: "http://log.taotaosou.com/browser_statistics.do?type=drawer_icon_click&t=" + new Date().getTime()
         });
-        if (_this.tkData.status === 0) {
+        if (JSON.parse(localStorage.getItem('TK-user-data')).status === 0) {
             chrome.tabs.getSelected(null, function (data) {
                 if (urlReg.test(data.url)) {
                     chrome.tabs.executeScript(null, {file: "js/login/login.js"});
