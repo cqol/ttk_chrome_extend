@@ -38,7 +38,7 @@
                 });
 
                 //taotaosou login
-                $(document).on('session:refreshed', function (data) {
+                $(document).on('session:refreshed', function (e, data) {
                     chrome.extension.sendRequest({"command": "cmdUpdateState","status": 1, "id": data.id});
                     localStorage.setItem('TK-user-data', JSON.stringify({"command": "cmdUpdateState","status": 1, "id": data.id}));
                 })
@@ -54,7 +54,11 @@
 
     var port = chrome.runtime.connect({name: "userStatus"});
     port.onMessage.addListener(function(msg) {
-        console.log('================');
+        if (msg.id !== '') {
+            console.log('========淘淘搜欢迎您========');
+        } else {
+            console.log('========淘淘搜欢迎您再来========');
+        }
         console.log(msg);
         localStorage.setItem('TK-user-data', JSON.stringify(msg));
     });
