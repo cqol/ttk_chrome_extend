@@ -52,9 +52,37 @@
         }
     });
 
-    var port = chrome.runtime.connect({name: "userStatus"});
-    port.onMessage.addListener(function(msg) {
-        console.log("========淘淘搜欢迎您的加入 http://www.taotaosou.com/about/jlwm.html");
-        localStorage.setItem('TK-user-data', JSON.stringify(msg));
-    });
+    if (typeof chrome.runtime === 'undefined') {
+        $.ajax({
+            url: "http://www.taotaosou.com/uc/isLogin",
+            dataType: "json",
+            success: function (data) {
+                var tkData;
+                if (data.status === 0) {
+                    tkData = {
+                        command: 'cmdUpdateState',
+                        status: data.status,
+                        id: '',
+                        nick: ''
+                    };
+                } else {
+                    tkData = {
+                        command: 'cmdUpdateState',
+                        status: data.status,
+                        id: data.user.id,
+                        nick: data.user.nick
+                    };
+                }
+                chrome.extension.sendRequest(tkData);
+                localStorage.setItem('TK-user-data', JSON.stringify(tkData));
+            }
+        });
+    }else {
+        var port = chrome.runtime.connect({name: "userStatus"});
+        port.onMessage.addListener(function(msg) {
+            console.log("========淘淘搜欢迎您的加入 http://www.taotaosou.com/about/jlwm.html");
+            localStorage.setItem('TK-user-data', JSON.stringify(msg));
+        });
+    }
+
 })(jQuery);
