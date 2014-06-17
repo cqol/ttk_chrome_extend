@@ -15,19 +15,19 @@ taotaosou.extension.config.getGuid = function () {
     }).toUpperCase();
 };
 //这个函数可以检测到客户端发来的消息
-function clientmsg(msg) {
+function clientmsg(msg){
     alert(msg)
 }
 
 //这个函数给客户端发消息
-function sentClientData(data) {
-    try {
+function sentClientData(data){
+    try{
         var plugin = document.getElementById("taotaosouplugin");
-        if (plugin) {
+        if ( plugin) {
             plugin.sendDatatoClient(data);
         }
     }
-    catch (err) {
+    catch(err){
         console.log(err);
     }
 }
@@ -35,58 +35,33 @@ function sentClientData(data) {
 // init the config data
 taotaosou.extension.config.init = function () {
 
-    taotaosou.extension.config.data.version = "1.4.1";
-    taotaosou.extension.config.data.qdid = "0001000320131018";
-    taotaosou.extension.config.data.source = "Chrome";
+    taotaosou.extension.config.data.version = "1.4.2";
+    taotaosou.extension.config.data.qdid = "0011040020131018";
+    taotaosou.extension.config.data.source = "360Se6";
     taotaosou.extension.config.data.guid = taotaosou.extension.config.getGuid();
     taotaosou.extension.config.data.actived = false;
-    taotaosou.extension.config.data.browser = "Unknow";
-
-    (function (data) {
-        var userAgent = window.navigator.userAgent;
-        if (userAgent.match(/CoolNovo/)) {     //枫树
-            data.qdid = "0001000620131018";
-            data.type = "CJ_instal_fengshu";
-            data.source = "CoolNovo";
-            return;
-        } else if (userAgent.match(/LBBROWSER/)) {  //猎豹
-            data.qdid = "0001000720131018";
-            data.type = "CJ_instal_liebao";
-            data.source = "Liebao";
-            return;
-        } else if (userAgent.match(/360EE/)) { //360极速(7.5后有效)
-            data.qdid = "0001000520131018";
-            data.type = "CJ_instal_360js";
-            data.source = "360Jisu";
-            return;
-        } else if (userAgent.match(/360SE/)) { //360SE6(6.2后有效)
-            data.qdid = "0001000920131018";
-            data.type = "CJ_instal_360cs";
-            data.source = "360Se6";
-            return;
-        } else if (userAgent.match(/BIDUBrowser/)) { //百度
-            data.qdid = "0001001420131018";
-            data.type = "CJ_instal_baidu";
-            data.source = "Baidu";
-            return;
-        } else if (userAgent.match(/Chrome/)) {  //Chrome
-            data.qdid = "0001000320131018";   // Chrome浏览器应用中心
-            data.type = "CJ_instal_Chrome";
-            data.source = "Chrome";
-            return;
-        } else {
-            data.qdid = "0001009920131018";
-            data.type = "CJ_instal_tts";
-            data.source = "Unknown";
+    taotaosou.extension.config.data.browser = "360SE";
+    taotaosou.extension.config.data.type = "CJ_instal_360cs";
+    // Create the plugin and init theplugin
+    try{
+        if( document.getElementById("taotaosouplugin") == null){
+            var plugin = document.createElement("embed");
+            plugin.setAttribute('type', 'application/x-taotaosou-extension');
+            plugin.setAttribute('hidden', true);
+            plugin.setAttribute('id', 'taotaosouplugin');
+            document.body.appendChild(plugin);
         }
-    })(taotaosou.extension.config.data);
+    }
+    catch (err) {
+        console.log(err);
+    }
 };
 
 // read the config data from plugin
 taotaosou.extension.config.readLocalData = function () {
     try {
         var plugin = document.getElementById("taotaosouplugin");
-        if (plugin) {
+        if ( plugin) {
             var tmp = plugin.getQdid();
             if (tmp != "Unknow") {
                 taotaosou.extension.config.data.qdid = tmp;
@@ -107,9 +82,9 @@ taotaosou.extension.config.readLocalData = function () {
 taotaosou.extension.config.isNeedMsg = function () {
 
     var isNeedMsg = 1; // 默认打开
-    try {
+    try{
         var plugin = document.getElementById("taotaosouplugin");
-        if (plugin) {
+        if ( plugin) {
             var tmp1 = plugin.isNeedMsg();
             if (tmp1 == false) {
                 isNeedMsg = '0';
@@ -122,22 +97,22 @@ taotaosou.extension.config.isNeedMsg = function () {
     return isNeedMsg;
 }
 
-taotaosou.extension.config.getClientUseId = function () {
+taotaosou.extension.config.getClientUseId = function(){
     var clientUserId = "UnLogin"
-    try {
+    try{
         var plugin = document.getElementById("taotaosouplugin");
-        if (plugin) {
+        if ( plugin) {
             clientUserId = plugin.getClientUserID();
         }
     }
-    catch (err) {
+    catch(err){
         console.log(err);
     }
     return clientUserId;
 
 }
 
-taotaosou.extension.requestHandler = function (request, sender, sendResponse) {
+taotaosou.extension.requestHandler = function( request, sender, sendResponse ){
     if (request.command == "cmdInject") {
         var sent = JSON.parse(localStorage.tts_config_data);
         sent.needmessage = taotaosou.extension.config.isNeedMsg();
@@ -146,15 +121,15 @@ taotaosou.extension.requestHandler = function (request, sender, sendResponse) {
     }
 };
 
-taotaosou.extension.getOSFromUseragent = function () {
+taotaosou.extension.getOSFromUseragent = function(){
     var retOS = "Unknow";
     try {
         var userAgent = window.navigator.userAgent;
-        var matchList = userAgent.match(/([^(]+?)(?=\))/g);
-        if (matchList != null) {
+        var matchList = userAgent.match( /([^(]+?)(?=\))/g );
+        if ( matchList != null){
             retOS = matchList[0];
         }
-    } catch (err) {
+    }catch( err ){
         console.log(err);
     }
     return retOS;
@@ -166,16 +141,17 @@ taotaosou.extension.getOSFromUseragent = function () {
 
     if (isActive == "true") {
         var value = localStorage.tts_config_data;
-        if (typeof(value) != "undefined") {
-            value = JSON.parse(value);
+        if ( typeof(value) != "undefined" ){
+            value = JSON.parse( value );
         }
         // forward compatible ( <=1.3.9 )
-        if (typeof(value) == "undefined" || typeof(value.actived) == "undefined") {
+        if ( typeof(value) == "undefined" || typeof(value.actived) == "undefined" ) {
             taotaosou.extension.config.readLocalData();
             localStorage.tts_config_data = JSON.stringify(taotaosou.extension.config.data);
             // update the version and default browsr when extension upgrade has completed.
         }
-        else if (value != null && value.version != null && value.version != taotaosou.extension.config.data.version) {
+        else if ( value != null && value.version != null && value.version != taotaosou.extension.config.data.version)
+        {
             taotaosou.extension.config.readLocalData();
             value.version = taotaosou.extension.config.data.version;
             value.browser = taotaosou.extension.config.data.browser;
@@ -210,21 +186,21 @@ taotaosou.extension.getOSFromUseragent = function () {
     }
 })();
 
-(function () {
+(function (){
     var isExtStartedToday = function () {
         var t = new Date();
-        var Today = (t.getYear() + 1900).toString();
-        Today += (t.getMonth() + 1) > 9 ? ((t.getMonth() + 1).toString()) : ("0" + (t.getMonth() + 1).toString());
-        Today += t.getDate() > 9 ? (t.getDate().toString()) : ("0" + t.getDate().toString());
+        var Today = (t.getYear()+1900).toString() ;
+        Today += (t.getMonth()+1)>9?((t.getMonth()+1).toString()):("0"+(t.getMonth()+1).toString()) ;
+        Today += t.getDate()>9?(t.getDate().toString()):("0"+t.getDate().toString()) ;
         var lastTime = localStorage.tts_lasttime_sendstartlog;
         localStorage.tts_lasttime_sendstartlog = Today;
-        if (lastTime && lastTime == Today) {
+        if ( lastTime && lastTime == Today ){
             return true;
         }
         return false;
     }
 
-    if (!isExtStartedToday()) { //今天未发送过启动日志
+    if ( !isExtStartedToday() ){ //今天未发送过启动日志
         if (document.getElementById('extFirstStartLog') == null) {
             try {
                 var div = document.createElement('div');
@@ -296,9 +272,9 @@ taotaosou.extension.getOSFromUseragent = function () {
                 }
                 localStorage.setItem('TK-user-data', JSON.stringify(tkData));
                 sentClientData(JSON.stringify({
-                    msgType: tkData.status,  //1:login; 0:logout;
-                    bower: taotaosou.extension.config.data.browser,
-                    uid: data.id
+                    status:tkData.status,  //1:login; 0:logout;
+                    bower:taotaosou.extension.config.data.browser,
+                    uid:data.id
                 }));
 
             }
@@ -310,22 +286,22 @@ taotaosou.extension.getOSFromUseragent = function () {
         });
 
         /*chrome.extension.onRequest.addListener(function (request, sender, sendRequest) {
-            if (request.command == "cmdUpdateState") {
-                if (request.status === 0) {
-                    chrome.browserAction.setPopup({popup: ""});
-                    chrome.browserAction.setBadgeText({text: "?"});
-                    chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
-                    chrome.browserAction.setIcon({path: "../img/icon-non.png"});
-                } else if (request.status === 1) {
-                    chrome.browserAction.setBadgeText({text: ""});
-                    chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
-                    chrome.browserAction.setIcon({path: "../img/icon.png"});
-                    chrome.browserAction.setPopup({popup: "html/popup.html"});
-                }
-                sendRequest(request);
-                localStorage.setItem('TK-user-data', JSON.stringify(request));
-            }
-        });*/
+         if (request.command == "cmdUpdateState") {
+         if (request.status === 0) {
+         chrome.browserAction.setPopup({popup: ""});
+         chrome.browserAction.setBadgeText({text: "?"});
+         chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
+         chrome.browserAction.setIcon({path: "../img/icon-non.png"});
+         } else if (request.status === 1) {
+         chrome.browserAction.setBadgeText({text: ""});
+         chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
+         chrome.browserAction.setIcon({path: "../img/icon.png"});
+         chrome.browserAction.setPopup({popup: "html/popup.html"});
+         }
+         sendRequest(request);
+         localStorage.setItem('TK-user-data', JSON.stringify(request));
+         }
+         });*/
 
         if (_this.tkData && _this.tkData.status === 1) {
             _this.socket();
@@ -383,6 +359,7 @@ taotaosou.extension.getOSFromUseragent = function () {
         }
     }
 
+
     //登陆退出 监听cookie
     chrome.cookies.onChanged.addListener(function (data) {
         if (data.cause.match(/overwrite/) && data.removed) {
@@ -393,7 +370,7 @@ taotaosou.extension.getOSFromUseragent = function () {
                 chrome.browserAction.setIcon({path: "../img/icon-non.png"});
                 localStorage.setItem('TK-user-data', JSON.stringify({"command": "cmdUpdateState", "status": 0}));
                 sentClientData(JSON.stringify({
-                    msgType: 2,  //1:login; 0:logout;
+                    status: 2,  //1:login; 0:logout;
                     bower: taotaosou.extension.config.data.browser,
                     uid: 0
                 }));
@@ -406,7 +383,7 @@ taotaosou.extension.getOSFromUseragent = function () {
                 chrome.browserAction.setPopup({popup: "html/popup.html"});
                 localStorage.setItem('TK-user-data', JSON.stringify({"command": "cmdUpdateState", "status": 1, "id": data.cookie.value}));
                 sentClientData(JSON.stringify({
-                    msgType: 1,  //1:login; 0:logout;
+                    status: 1,  //1:login; 0:logout;
                     bower: taotaosou.extension.config.data.browser,
                     uid: data.cookie.value
                 }));
