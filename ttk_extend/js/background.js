@@ -24,10 +24,12 @@ function clientmsg(msg){
     //自动登录接口：http://www.taotaosou.com/uc/clientAutoLogin?callback=?&uid=xxx&sig=xxx
     $.ajax({
         url: "http://www.taotaosou.com/uc/clientAutoLogin?callback=?&uid=" + user.uid + "&sig=" + user.sig,
+        dataType: "json",
         success: function (data) {
             var tkData = {
                 status: 1,
-                id: user.uid
+                id: data.user.id,
+                nick: data.user.nick
             }
             chrome.browserAction.setBadgeText({text: ""});
             chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
