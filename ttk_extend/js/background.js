@@ -16,7 +16,27 @@ taotaosou.extension.config.getGuid = function () {
 };
 //这个函数可以检测到客户端发来的消息
 function clientmsg(msg){
-    alert(msg)
+    if (!msg) {
+        return;
+    }
+    var data = JSON.parse(msg),
+        user = JSON.parse(data.msg);
+    //自动登录接口：http://www.taotaosou.com/uc/clientAutoLogin?callback=?&uid=xxx&sig=xxx
+    $.ajax({
+        url: "http://www.taotaosou.com/uc/clientAutoLogin?callback=?&uid=" + user.uid + "&sig=" + user.sig,
+        success: function (data) {
+            var tkData = {
+                status: 1,
+                id: user.uid
+            }
+            chrome.browserAction.setBadgeText({text: ""});
+            chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
+            chrome.browserAction.setIcon({path: "../img/icon.png"});
+            chrome.browserAction.setPopup({popup: "html/popup.html"});
+            localStorage.setItem('TK-user-data', JSON.stringify(tkData));
+        }
+    });
+
 }
 
 //这个函数给客户端发消息
@@ -259,6 +279,17 @@ taotaosou.extension.getOSFromUseragent = function(){
                     chrome.browserAction.setBadgeText({text: "?"});
                     chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
                     chrome.browserAction.setIcon({path: "../img/icon-non.png"});
+                    $.ajax({
+                        url: "http://www.taotaosou.com/uc/createtmpuser?tmpuserid=" + taotaosou.extension.config.data.guid,
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data);
+                            tkData.id = data.id;
+                            tkData.tip = 0;
+                            localStorage.setItem('TK-user-data', JSON.stringify(tkData));
+                        }
+                    });
+
                 } else {
                     tkData = {
                         status: data.status,
@@ -269,8 +300,8 @@ taotaosou.extension.getOSFromUseragent = function(){
                     chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
                     chrome.browserAction.setIcon({path: "../img/icon.png"});
                     chrome.browserAction.setPopup({popup: "html/popup.html"});
+                    localStorage.setItem('TK-user-data', JSON.stringify(tkData));
                 }
-                localStorage.setItem('TK-user-data', JSON.stringify(tkData));
                 sentClientData(JSON.stringify({
                     status:tkData.status,  //1:login; 0:logout;
                     bower:taotaosou.extension.config.data.browser,
@@ -286,21 +317,7 @@ taotaosou.extension.getOSFromUseragent = function(){
         });
 
         /*chrome.extension.onRequest.addListener(function (request, sender, sendRequest) {
-         if (request.command == "cmdUpdateState") {
-         if (request.status === 0) {
-         chrome.browserAction.setPopup({popup: ""});
-         chrome.browserAction.setBadgeText({text: "?"});
-         chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
-         chrome.browserAction.setIcon({path: "../img/icon-non.png"});
-         } else if (request.status === 1) {
-         chrome.browserAction.setBadgeText({text: ""});
-         chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
-         chrome.browserAction.setIcon({path: "../img/icon.png"});
-         chrome.browserAction.setPopup({popup: "html/popup.html"});
-         }
-         sendRequest(request);
-         localStorage.setItem('TK-user-data', JSON.stringify(request));
-         }
+         console.log(request);
          });*/
 
         if (_this.tkData && _this.tkData.status === 1) {
@@ -390,6 +407,8 @@ taotaosou.extension.getOSFromUseragent = function(){
             }
         }
     });
+
+    //自动登录接口：http://www.taotaosou.com/uc/clientAutoLogin?callback=?&uid=xxx&sig=xxx
 
     //向content推送登陆状态
     chrome.runtime.onConnect.addListener(function (port) {

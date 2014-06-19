@@ -55,10 +55,15 @@
                         localStorage.setItem('TK-user-data', JSON.stringify(data));
                     });
                 })*/
-                var port = chrome.runtime.connect({name:'userStatus'});
-                port.onMessage.addListener(function (msg) {
-                    localStorage.setItem('TK-user-data', msg);
-                });
+
+                //hack生成临时ID慢的情况，给个延迟
+                setTimeout(function () {
+                    var port = chrome.runtime.connect({name:'userStatus'});
+                        port.onMessage.addListener(function (msg) {
+                        console.log(msg);
+                        localStorage.setItem('TK-user-data', msg);
+                    });
+                }, 800);
             } catch (err) {
                 console.log(err);
             }
