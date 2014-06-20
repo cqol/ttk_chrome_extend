@@ -60,7 +60,7 @@
                 setTimeout(function () {
                     var port = chrome.runtime.connect({name:'userStatus'});
                         port.onMessage.addListener(function (msg) {
-                        console.log(msg);
+                        //console.log(msg);
                         localStorage.setItem('TK-user-data', msg);
                     });
                 }, 800);

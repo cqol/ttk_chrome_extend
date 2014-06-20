@@ -16,14 +16,11 @@ taotaosou.extension.config.getGuid = function () {
 };
 //这个函数可以检测到客户端发来的消息
 function clientmsg(msg){
-    if (!msg) {
-        return;
-    }
-    var data = JSON.parse(msg),
-        user = JSON.parse(data.msg);
+
+    var data = JSON.parse(msg);
     //自动登录接口：http://www.taotaosou.com/uc/clientAutoLogin?callback=?&uid=xxx&sig=xxx
     $.ajax({
-        url: "http://www.taotaosou.com/uc/clientAutoLogin?callback=?&uid=" + user.uid + "&sig=" + user.sig,
+        url: "http://www.taotaosou.com/uc/clientAutoLogin?uid=" + data.uid + "&sig=" + data.sig,
         dataType: "json",
         success: function (data) {
             var tkData = {
@@ -285,7 +282,6 @@ taotaosou.extension.getOSFromUseragent = function(){
                         url: "http://www.taotaosou.com/uc/createtmpuser?tmpuserid=" + taotaosou.extension.config.data.guid,
                         dataType: "json",
                         success: function (data) {
-                            console.log(data);
                             tkData.id = data.id;
                             tkData.tip = 0;
                             localStorage.setItem('TK-user-data', JSON.stringify(tkData));
