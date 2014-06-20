@@ -385,7 +385,7 @@ taotaosou.extension.getOSFromUseragent = function(){
                 chrome.browserAction.setIcon({path: "../img/icon-non.png"});
                 localStorage.setItem('TK-user-data', JSON.stringify({"command": "cmdUpdateState", "status": 0}));
                 sentClientData(JSON.stringify({
-                    status: 2,  //1:login; 0:logout;
+                    status: 0,  //1:login; 0:logout;
                     bower: taotaosou.extension.config.data.browser,
                     uid: 0
                 }));
