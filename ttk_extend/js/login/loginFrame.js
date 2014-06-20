@@ -10,6 +10,14 @@
     delay = setInterval(function () {
 
         if (window.LiveKit) {
+            var tkLoad = document.getElementById('J---TK-load');
+
+            window.GUID = (function () {
+                if (tkLoad.getAttribute('data-guid')) {
+                    return tkLoad.getAttribute('data-guid');
+                }
+            })();
+
             window.LiveKit.login();
             window.LiveKit.once('session:refreshed', function (data) {
                 //location.reload();
