@@ -318,11 +318,11 @@ taotaosou.extension.getOSFromUseragent = function(){
          console.log(request);
          });*/
 
-        if (_this.tkData && _this.tkData.status === 1) {
+        /*if (_this.tkData && _this.tkData.status === 1) {
             _this.socket();
-        }
+        }*/
     }
-    getData.prototype.socket = function () {
+    /*getData.prototype.socket = function () {
         var ws = new WebSocket("ws://messagedcg.taotaosou.com:843/");
 
         // Set event handlers.
@@ -348,7 +348,7 @@ taotaosou.extension.getOSFromUseragent = function(){
                 }
             }
         };
-    }
+    }*/
     getData.prototype.updataIcon = function () {
         var urlReg = new RegExp(/^http:.*$/);
         chrome.browserAction.setPopup({popup: ""});
