@@ -15,10 +15,11 @@ taotaosou.extension.config.getGuid = function () {
     }).toUpperCase();
 };
 //这个函数可以检测到客户端发来的消息
-function clientmsg(msg){
+function clientmsg(msg) {
 
     var data = JSON.parse(msg);
     //自动登录接口：http://www.taotaosou.com/uc/clientAutoLogin?callback=?&uid=xxx&sig=xxx
+    // msg = {uid:'123',sig:'xxx'}
     $.ajax({
         url: "http://www.taotaosou.com/uc/clientAutoLogin?uid=" + data.uid + "&sig=" + data.sig,
         dataType: "json",
@@ -39,14 +40,14 @@ function clientmsg(msg){
 }
 
 //这个函数给客户端发消息
-function sentClientData(data){
-    try{
+function sentClientData(data) {
+    try {
         var plugin = document.getElementById("taotaosouplugin");
-        if ( plugin) {
+        if (plugin) {
             plugin.sendDatatoClient(data);
         }
     }
-    catch(err){
+    catch (err) {
         console.log(err);
     }
 }
@@ -62,8 +63,8 @@ taotaosou.extension.config.init = function () {
     taotaosou.extension.config.data.browser = "360SE";
     taotaosou.extension.config.data.type = "CJ_instal_360cs";
     // Create the plugin and init theplugin
-    try{
-        if( document.getElementById("taotaosouplugin") == null){
+    try {
+        if (document.getElementById("taotaosouplugin") == null) {
             var plugin = document.createElement("embed");
             plugin.setAttribute('type', 'application/x-taotaosou-extension');
             plugin.setAttribute('hidden', true);
@@ -80,7 +81,7 @@ taotaosou.extension.config.init = function () {
 taotaosou.extension.config.readLocalData = function () {
     try {
         var plugin = document.getElementById("taotaosouplugin");
-        if ( plugin) {
+        if (plugin) {
             var tmp = plugin.getQdid();
             if (tmp != "Unknow") {
                 taotaosou.extension.config.data.qdid = tmp;
@@ -101,9 +102,9 @@ taotaosou.extension.config.readLocalData = function () {
 taotaosou.extension.config.isNeedMsg = function () {
 
     var isNeedMsg = 1; // 默认打开
-    try{
+    try {
         var plugin = document.getElementById("taotaosouplugin");
-        if ( plugin) {
+        if (plugin) {
             var tmp1 = plugin.isNeedMsg();
             if (tmp1 == false) {
                 isNeedMsg = '0';
@@ -116,39 +117,42 @@ taotaosou.extension.config.isNeedMsg = function () {
     return isNeedMsg;
 }
 
-taotaosou.extension.config.getClientUseId = function(){
-    var clientUserId = "UnLogin"
-    try{
+taotaosou.extension.config.getClientUseId = function () {
+    var clientUserId = "NoLogin"
+    try {
         var plugin = document.getElementById("taotaosouplugin");
-        if ( plugin) {
+        if (plugin) {
             clientUserId = plugin.getClientUserID();
         }
     }
-    catch(err){
+    catch (err) {
         console.log(err);
     }
+    //msg = {uid:'123',sig:'xxx'}
     return clientUserId;
 
 }
 
-taotaosou.extension.requestHandler = function( request, sender, sendResponse ){
+taotaosou.extension.requestHandler = function (request, sender, sendResponse) {
     if (request.command == "cmdInject") {
         var sent = JSON.parse(localStorage.tts_config_data);
         sent.needmessage = taotaosou.extension.config.isNeedMsg();
         sent.clientuserid = taotaosou.extension.config.getClientUseId();
+
         sendResponse(sent);
+
     }
 };
 
-taotaosou.extension.getOSFromUseragent = function(){
+taotaosou.extension.getOSFromUseragent = function () {
     var retOS = "Unknow";
     try {
         var userAgent = window.navigator.userAgent;
-        var matchList = userAgent.match( /([^(]+?)(?=\))/g );
-        if ( matchList != null){
+        var matchList = userAgent.match(/([^(]+?)(?=\))/g);
+        if (matchList != null) {
             retOS = matchList[0];
         }
-    }catch( err ){
+    } catch (err) {
         console.log(err);
     }
     return retOS;
@@ -160,17 +164,16 @@ taotaosou.extension.getOSFromUseragent = function(){
 
     if (isActive == "true") {
         var value = localStorage.tts_config_data;
-        if ( typeof(value) != "undefined" ){
-            value = JSON.parse( value );
+        if (typeof(value) != "undefined") {
+            value = JSON.parse(value);
         }
         // forward compatible ( <=1.3.9 )
-        if ( typeof(value) == "undefined" || typeof(value.actived) == "undefined" ) {
+        if (typeof(value) == "undefined" || typeof(value.actived) == "undefined") {
             taotaosou.extension.config.readLocalData();
             localStorage.tts_config_data = JSON.stringify(taotaosou.extension.config.data);
             // update the version and default browsr when extension upgrade has completed.
         }
-        else if ( value != null && value.version != null && value.version != taotaosou.extension.config.data.version)
-        {
+        else if (value != null && value.version != null && value.version != taotaosou.extension.config.data.version) {
             taotaosou.extension.config.readLocalData();
             value.version = taotaosou.extension.config.data.version;
             value.browser = taotaosou.extension.config.data.browser;
@@ -205,21 +208,21 @@ taotaosou.extension.getOSFromUseragent = function(){
     }
 })();
 
-(function (){
+(function () {
     var isExtStartedToday = function () {
         var t = new Date();
-        var Today = (t.getYear()+1900).toString() ;
-        Today += (t.getMonth()+1)>9?((t.getMonth()+1).toString()):("0"+(t.getMonth()+1).toString()) ;
-        Today += t.getDate()>9?(t.getDate().toString()):("0"+t.getDate().toString()) ;
+        var Today = (t.getYear() + 1900).toString();
+        Today += (t.getMonth() + 1) > 9 ? ((t.getMonth() + 1).toString()) : ("0" + (t.getMonth() + 1).toString());
+        Today += t.getDate() > 9 ? (t.getDate().toString()) : ("0" + t.getDate().toString());
         var lastTime = localStorage.tts_lasttime_sendstartlog;
         localStorage.tts_lasttime_sendstartlog = Today;
-        if ( lastTime && lastTime == Today ){
+        if (lastTime && lastTime == Today) {
             return true;
         }
         return false;
     }
 
-    if ( !isExtStartedToday() ){ //今天未发送过启动日志
+    if (!isExtStartedToday()) { //今天未发送过启动日志
         if (document.getElementById('extFirstStartLog') == null) {
             try {
                 var div = document.createElement('div');
@@ -278,16 +281,28 @@ taotaosou.extension.getOSFromUseragent = function(){
                     chrome.browserAction.setBadgeText({text: "?"});
                     chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
                     chrome.browserAction.setIcon({path: "../img/icon-non.png"});
-                    $.ajax({
-                        url: "http://www.taotaosou.com/uc/createtmpuser?tmpuserid=" + taotaosou.extension.config.data.guid,
-                        dataType: "json",
-                        success: function (data) {
-                            tkData.id = data.id;
-                            tkData.tip = 0;
-                            localStorage.setItem('TK-user-data', JSON.stringify(tkData));
+                    try {
+                        var pluginData = JSON.parse(taotaosou.extension.config.getClientUseId());
+                        if (pluginData === 'NoLogin') {
+                            $.ajax({
+                                url: "http://www.taotaosou.com/uc/createtmpuser?tmpuserid=" + taotaosou.extension.config.data.guid,
+                                dataType: "json",
+                                success: function (data) {
+                                    tkData.id = data.id;
+                                    tkData.tip = 0;
+                                    localStorage.setItem('TK-user-data', JSON.stringify(tkData));
+                                }
+                            });
+                        } else {
+                            tkData = {
+                                status: 1,
+                                id: pluginData.uid,
+                                nick: ''
+                            }
                         }
-                    });
-
+                    } catch (err) {
+                        console.log(err);
+                    }
                 } else {
                     tkData = {
                         status: data.status,
@@ -301,9 +316,9 @@ taotaosou.extension.getOSFromUseragent = function(){
                     localStorage.setItem('TK-user-data', JSON.stringify(tkData));
                 }
                 sentClientData(JSON.stringify({
-                    status:tkData.status,  //1:login; 0:logout;
-                    bower:taotaosou.extension.config.data.browser,
-                    uid:data.id
+                    status: tkData.status,  //1:login; 0:logout;
+                    bower: taotaosou.extension.config.data.browser,
+                    uid: data.id
                 }));
 
             }
