@@ -299,6 +299,22 @@ taotaosou.extension.getOSFromUseragent = function () {
                                 id: pluginData.uid,
                                 nick: ''
                             }
+                            $.ajax({
+                                url: "http://www.taotaosou.com/uc/clientAutoLogin?uid=" + pluginData.uid + "&sig=" + pluginData.sig,
+                                dataType: "json",
+                                success: function (data) {
+                                    var tkData = {
+                                        status: 1,
+                                        id: data.user.id,
+                                        nick: data.user.nick
+                                    }
+                                    chrome.browserAction.setBadgeText({text: ""});
+                                    chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
+                                    chrome.browserAction.setIcon({path: "../img/icon.png"});
+                                    chrome.browserAction.setPopup({popup: "html/popup.html"});
+                                    localStorage.setItem('TK-user-data', JSON.stringify(tkData));
+                                }
+                            });
                         }
                     } catch (err) {
                         console.log(err);
@@ -314,13 +330,12 @@ taotaosou.extension.getOSFromUseragent = function () {
                     chrome.browserAction.setIcon({path: "../img/icon.png"});
                     chrome.browserAction.setPopup({popup: "html/popup.html"});
                     localStorage.setItem('TK-user-data', JSON.stringify(tkData));
+                    sentClientData(JSON.stringify({
+                        status: tkData.status,  //1:login; 0:logout;
+                        bower: taotaosou.extension.config.data.browser,
+                        uid: tkData.id
+                    }));
                 }
-                sentClientData(JSON.stringify({
-                    status: tkData.status,  //1:login; 0:logout;
-                    bower: taotaosou.extension.config.data.browser,
-                    uid: data.id
-                }));
-
             }
         });
         _this.tkData = JSON.parse(localStorage.getItem('TK-user-data'));
@@ -329,41 +344,8 @@ taotaosou.extension.getOSFromUseragent = function () {
             _this.updataIcon();
         });
 
-        /*chrome.extension.onRequest.addListener(function (request, sender, sendRequest) {
-         console.log(request);
-         });*/
-
-        /*if (_this.tkData && _this.tkData.status === 1) {
-            _this.socket();
-        }*/
     }
-    /*getData.prototype.socket = function () {
-        var ws = new WebSocket("ws://messagedcg.taotaosou.com:843/");
 
-        // Set event handlers.
-        ws.onopen = function () {
-
-            ws.send('{ "xip": 100001, "data": { "userId": ' + JSON.parse(localStorage.getItem('TK-user-data')).id + ', "clientId": ' + 7 + ' } }');
-        };
-        ws.onmessage = function (e) {
-            ws.send(' {"xip": 200001, "data": { "notifyId": ' + $.parseJSON(e.data).notifyId + ', "userId": ' + JSON.parse(localStorage.getItem('TK-user-data')).id + ', "clientId": ' + 7 + ' } } ');
-
-            var data = JSON.parse(e.data), msgList = data.list;
-            if (msgList.length === 0) {
-                return false;
-            }
-
-            for (var i = 0, len = msgList.length; i < len; i++) {
-                if (msgList[i].id === 1 || msgList[i].id === 11 || msgList[i].id === 18) {
-                    //if (msgList[i].id === 1) {
-                    if (msgList[i].count > 0) {
-                        chrome.browserAction.setBadgeText({text: "·"});
-                        break;
-                    }
-                }
-            }
-        };
-    }*/
     getData.prototype.updataIcon = function () {
         var urlReg = new RegExp(/^http:.*$/);
         chrome.browserAction.setPopup({popup: ""});
