@@ -16,7 +16,6 @@ taotaosou.extension.config.getGuid = function () {
 };
 //这个函数可以检测到客户端发来的消息
 function clientmsg(msg) {
-
     var data = JSON.parse(msg);
     //自动登录接口：http://www.taotaosou.com/uc/clientAutoLogin?callback=?&uid=xxx&sig=xxx
     // msg = {uid:'123',sig:'xxx'}
@@ -60,7 +59,7 @@ taotaosou.extension.config.init = function () {
     taotaosou.extension.config.data.source = "360Se6";
     taotaosou.extension.config.data.guid = taotaosou.extension.config.getGuid();
     taotaosou.extension.config.data.actived = false;
-    taotaosou.extension.config.data.browser = "360SE";
+    taotaosou.extension.config.data.browser = "Unknow";
     taotaosou.extension.config.data.type = "CJ_instal_360cs";
     // Create the plugin and init theplugin
     try {
@@ -138,9 +137,7 @@ taotaosou.extension.requestHandler = function (request, sender, sendResponse) {
         var sent = JSON.parse(localStorage.tts_config_data);
         sent.needmessage = taotaosou.extension.config.isNeedMsg();
         sent.clientuserid = taotaosou.extension.config.getClientUseId();
-
         sendResponse(sent);
-
     }
 };
 
@@ -229,7 +226,7 @@ taotaosou.extension.getOSFromUseragent = function () {
                 div.id = "extFirstStartLog";
 
                 var img = document.createElement('img');
-                img.src = "http://dc.log1.taotaosou.com/statistics.do?systemName=ttk_plugin_load&url=1&browser=" + taotaosou.extension.config.data.type + "&os=" + encodeURIComponent(taotaosou.extension.getOSFromUseragent()) + "&t=" + localStorage.tts_lasttime_sendstartlog;
+                img.src = "http://dc.log1.taotaosou.com/statistics.do?systemName=ttk_plugin_load&url=1&browser=" + taotaosou.extension.config.data.source + "&os=" + encodeURIComponent(taotaosou.extension.getOSFromUseragent()) + "&t=" + localStorage.tts_lasttime_sendstartlog;
                 img.width = "0";
                 img.height = "0";
                 img.setAttribute('style', "display: none;");
@@ -282,25 +279,26 @@ taotaosou.extension.getOSFromUseragent = function () {
                     chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
                     chrome.browserAction.setIcon({path: "../img/icon-non.png"});
                     try {
-                        var pluginData = JSON.parse(taotaosou.extension.config.getClientUseId());
+                        var pluginData = taotaosou.extension.config.getClientUseId();
+                        //获取不到客户端的id使用临时帐号登陆
                         if (pluginData === 'NoLogin') {
                             $.ajax({
                                 url: "http://www.taotaosou.com/uc/createtmpuser?tmpuserid=" + taotaosou.extension.config.data.guid,
                                 dataType: "json",
                                 success: function (data) {
+
                                     tkData.id = data.id;
                                     tkData.tip = 0;
+                                    console.log(tkData);
                                     localStorage.setItem('TK-user-data', JSON.stringify(tkData));
                                 }
                             });
-                        } else {
-                            tkData = {
-                                status: 1,
-                                id: pluginData.uid,
-                                nick: ''
-                            }
+                        }
+                        else //获取到客户的ID使用客户端的id登陆
+                        {
+                            var userData = JSON.stringify(pluginData);
                             $.ajax({
-                                url: "http://www.taotaosou.com/uc/clientAutoLogin?uid=" + pluginData.uid + "&sig=" + pluginData.sig,
+                                url: "http://www.taotaosou.com/uc/clientAutoLogin?uid=" + userData.uid + "&sig=" + userData.sig,
                                 dataType: "json",
                                 success: function (data) {
                                     var tkData = {
@@ -319,7 +317,8 @@ taotaosou.extension.getOSFromUseragent = function () {
                     } catch (err) {
                         console.log(err);
                     }
-                } else {
+                }
+                else {
                     tkData = {
                         status: data.status,
                         id: data.user.id,
@@ -330,45 +329,51 @@ taotaosou.extension.getOSFromUseragent = function () {
                     chrome.browserAction.setIcon({path: "../img/icon.png"});
                     chrome.browserAction.setPopup({popup: "html/popup.html"});
                     localStorage.setItem('TK-user-data', JSON.stringify(tkData));
+                    //当是自己登陆给客户端发送消息
                     sentClientData(JSON.stringify({
                         status: tkData.status,  //1:login; 0:logout;
-                        bower: taotaosou.extension.config.data.browser,
+                        bower: taotaosou.extension.config.data.source,
                         uid: tkData.id
                     }));
                 }
             }
         });
         _this.tkData = JSON.parse(localStorage.getItem('TK-user-data'));
-
         chrome.browserAction.onClicked.addListener(function () {
             _this.updataIcon();
         });
-
     }
 
     getData.prototype.updataIcon = function () {
-        var urlReg = new RegExp(/^http:.*$/);
+        var urlReg = new RegExp(/^http:.*$/),
+            userData = localStorage.getItem('TK-user-data');
         chrome.browserAction.setPopup({popup: ""});
         //点击埋点
         $.ajax({
             url: "http://log.taotaosou.com/browser_statistics.do?type=drawer_icon_click&t=" + new Date().getTime()
         });
-        if (JSON.parse(localStorage.getItem('TK-user-data')).status === 0) {
-            chrome.tabs.getSelected(null, function (data) {
-                if (urlReg.test(data.url)) {
-                    chrome.tabs.executeScript(null, {file: "js/login/login.js"});
-                } else {
-                    chrome.tabs.create({
-                        url: 'http://tk.taotaosou.com'
-                    }, function () {
+        try {
+            if (!userData || JSON.parse(userData).status == 0) {
+                chrome.tabs.getSelected(null, function (data) {
+                    if (urlReg.test(data.url)) {
                         chrome.tabs.executeScript(null, {file: "js/login/login.js"});
-                    });
-                }
-            });
-        } else {
-            chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
-            chrome.browserAction.setPopup({popup: "html/popup.html"});
+                    } else {
+                        chrome.tabs.create({
+                            url: 'http://tk.taotaosou.com'
+                        }, function () {
+                            chrome.tabs.executeScript(null, {file: "js/login/login.js"});
+                        });
+                    }
+                });
+            } else {
+                chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
+                chrome.browserAction.setPopup({popup: "html/popup.html"});
+            }
+
+        } catch (err) {
+            console.log(err);
         }
+
     }
 
 
@@ -381,11 +386,6 @@ taotaosou.extension.getOSFromUseragent = function () {
                 chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
                 chrome.browserAction.setIcon({path: "../img/icon-non.png"});
                 localStorage.setItem('TK-user-data', JSON.stringify({"command": "cmdUpdateState", "status": 0}));
-                sentClientData(JSON.stringify({
-                    status: 0,  //1:login; 0:logout;
-                    bower: taotaosou.extension.config.data.browser,
-                    uid: 0
-                }));
             }
         } else if (data.cause.match(/explicit/) && !data.removed) {
             if (data.cookie.name === 'tts_userId') {
@@ -396,7 +396,7 @@ taotaosou.extension.getOSFromUseragent = function () {
                 localStorage.setItem('TK-user-data', JSON.stringify({"command": "cmdUpdateState", "status": 1, "id": data.cookie.value}));
                 sentClientData(JSON.stringify({
                     status: 1,  //1:login; 0:logout;
-                    bower: taotaosou.extension.config.data.browser,
+                    bower: taotaosou.extension.config.data.source,
                     uid: data.cookie.value
                 }));
             }
