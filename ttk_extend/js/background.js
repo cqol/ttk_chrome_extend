@@ -4,62 +4,19 @@ var taotaosou = {
 		config: {}
 	}
 };
-
+var nTabId = 0;
 // config data
 taotaosou.extension.config.data = {};
 // create the guid
-taotaosou.extension.config.randomGuid = function () {
+taotaosou.extension.config.getGuid = function () {
 	return '00000000xxxxyxxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g,function (c) {
 		var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
 		return v.toString(16);
 	}).toUpperCase();
 };
-// get qudao from extinfo
-taotaosou.extension.config.getQudao = function () {
-	if (typeof(extinfo.qudao) == "undefined"){
-		return "0001009920131018";
-	}
-	return extinfo.qudao;
-};
-// get Source from extinfo
-taotaosou.extension.config.getSource = function () {
-	if (typeof(extinfo.source) == "undefined"){
-		return "Unknow";
-	}
-	return extinfo.source;
-};
-// get Type from extinfo
-taotaosou.extension.config.getType = function () {
-	if (typeof(extinfo.type) == "undefined"){
-		return "Cj_instal_tts";
-	}
-	return extinfo.type;
-};
-// get Version from extinfo
-taotaosou.extension.config.getVersion = function () {
-	if (typeof(extinfo.version) == "undefined"){
-		return "1.5.0";
-	}
-	return extinfo.version;
-};
-// get default browser from extinfo
-taotaosou.extension.config.getBrowser = function () {
-	if (typeof(extinfo.browser) == "undefined"){
-		return "unknow";
-	}
-	return extinfo.browser;
-};
-// get guid from extinfo
-taotaosou.extension.config.getGuid = function () {
-	if (typeof(extinfo.guid) == "undefined"){
-		return taotaosou.extension.config.randomGuid();
-	}
-	return extinfo.guid;
-};
 
 //这个函数可以检测到客户端发来的消息
 function clientmsg(msg){
-
 	var data = JSON.parse(msg);
 	//自动登录接口：http://www.taotaosou.com/uc/clientAutoLogin?callback=?&uid=xxx&sig=xxx
 	// msg = {uid:'123',sig:'xxx'}
@@ -72,17 +29,15 @@ function clientmsg(msg){
 				id: data.user.id,
 				nick: data.user.nick
 			}
-			chrome.browserAction.setBadgeText({text: ""});
-			chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
-			chrome.browserAction.setIcon({path: "../img/icon.png"});
-			chrome.browserAction.setPopup({popup: "html/popup.html"});
+			chrome.browserAction.setPopup({popup: "html/popup.html", width: 420, height: 598 });
+			chrome.browserAction.setIcon({path: "img/icon.png"});
 			localStorage.setItem('TK-user-data', JSON.stringify(tkData));
 		}
 	});
 
 }
 
-//这个函数给客户端发消息
+//这个函数给客户端发消息(搜狗中由于无法监听cookie所以这个函数没用)
 function sentClientData(data){
 	try{
 		var plugin = document.getElementById("taotaosouplugin");
@@ -97,14 +52,14 @@ function sentClientData(data){
 
 // init the config data
 taotaosou.extension.config.init = function () {
-	taotaosou.extension.config.data.version = taotaosou.extension.config.getVersion();
-	taotaosou.extension.config.data.qdid    = taotaosou.extension.config.getQudao();
-	taotaosou.extension.config.data.source  = taotaosou.extension.config.getSource();
-	taotaosou.extension.config.data.guid    = taotaosou.extension.config.getGuid();
+	taotaosou.extension.config.data.version = "1.5.2";
+	taotaosou.extension.config.data.qdid = "0011000420131018";
+	taotaosou.extension.config.data.source = "Sogou";
+	taotaosou.extension.config.data.guid = taotaosou.extension.config.getGuid();
 	taotaosou.extension.config.data.actived = false;
-	taotaosou.extension.config.data.browser = taotaosou.extension.config.getBrowser();
+	taotaosou.extension.config.data.browser = "Unknow";
 	taotaosou.extension.config.data.silent  = false;
-	taotaosou.extension.config.data.type    = taotaosou.extension.config.getType();
+	taotaosou.extension.config.data.type = "CJ_instal_Sougou";
 
 	// Create the plugin and init theplugin
 	try{
@@ -153,8 +108,8 @@ taotaosou.extension.config.isNeedMsg = function () {
 	try{
 		var plugin = document.getElementById("taotaosouplugin");
 		if ( plugin) {
-			var tmp = plugin.isNeedMsg();
-			if (!tmp) {
+			var tmp1 = plugin.isNeedMsg();
+			if (tmp1 == false) {
 				isNeedMsg = '0';
 			}
 		}
@@ -162,6 +117,7 @@ taotaosou.extension.config.isNeedMsg = function () {
 	catch (err) {
 		console.log(err);
 	}
+
 	return isNeedMsg;
 }
 
@@ -181,11 +137,26 @@ taotaosou.extension.config.getClientUseId = function () {
 
 }
 
-taotaosou.extension.requestHandler = function( request, sender, sendResponse ){
+taotaosou.extension.requesthandler = function( request, sender, sendResponse ){
+	if(request.command == "refreshPage" && sender.tab.id == nTabId) {
+		chrome.tabs.executeScript( nTabId, {file: "js/login/login.js"} );
+		nTabId = 0;
+	};
 	if (request.command == "cmdInject") {
 		var sent = JSON.parse(localStorage.tts_config_data);
-		sent.needmessage = taotaosou.extension.config.isNeedMsg();
+		sent.isNeedMessage = taotaosou.extension.config.isNeedMsg();
 		sendResponse(sent);
+	}
+	if (request.command == "cmdUpdateState") {
+		if (request.status === 0) {
+			chrome.browserAction.setPopup({popup: ""});
+			chrome.browserAction.setIcon({path: "img/icon.png"});
+		} else if (request.status === 1) {
+			chrome.browserAction.setPopup({popup: "html/popup.html", width: 420, height: 598 });
+			chrome.browserAction.setIcon({path: "img/icon.png"});
+		}
+		sendResponse(request);
+		localStorage.setItem('TK-user-data', JSON.stringify(request));
 	}
 };
 
@@ -212,7 +183,9 @@ taotaosou.extension.getOSFromUseragent = function(){
 	}
 	taotaosou.extension.config.init();
 
-	if (isActive) {
+	if (isActive)
+	{
+		// forward compatible ( <=1.3.7 )
 		var value = localStorage.tts_config_data;
 		if ( typeof(value) != "undefined" ){
 			value = JSON.parse( value );
@@ -222,14 +195,15 @@ taotaosou.extension.getOSFromUseragent = function(){
 			taotaosou.extension.config.readLocalData();
 			localStorage.tts_config_data = JSON.stringify(taotaosou.extension.config.data);
 			// update the version and default browsr when extension upgrade has completed.
-		}
-		else if ( value != null && value.version != null && value.version != taotaosou.extension.config.data.version)
-		{
+		} else if ( value != null && value.version != null && value.version != taotaosou.extension.config.data.version) {
 			taotaosou.extension.config.readLocalData();
 			value.version = taotaosou.extension.config.data.version;
 			value.browser = taotaosou.extension.config.data.browser;
 			localStorage.tts_config_data = JSON.stringify(value);
 			taotaosou.extension.config.data = value;
+		} else {
+			// synchronized the config data
+			taotaosou.extension.config.data = JSON.parse( localStorage.tts_config_data );
 		}
 	} else {
 		taotaosou.extension.config.readLocalData();
@@ -238,10 +212,11 @@ taotaosou.extension.getOSFromUseragent = function(){
 		localStorage.tts_chrome_isActive = true;
 	}
 
-	chrome.extension.onRequest.addListener(taotaosou.extension.requestHandler);
-
-	$.isEmptyObject = function (obj) {
-		for (var name in obj) {
+	chrome.extension.onRequest.addListener(taotaosou.extension.requesthandler);
+	$.isEmptyObject = function (obj)
+	{
+		for (var name in obj)
+		{
 			return false;
 		}
 		return true;
@@ -282,7 +257,7 @@ taotaosou.extension.getOSFromUseragent = function(){
 				div.id = "extFirstStartLog";
 
 				var img = document.createElement('img');
-				img.src = "http://dc.log1.taotaosou.com/statistics.do?systemName=ttk_plugin_load&url=1&browser=" + taotaosou.extension.config.data.source + "&os=" + encodeURIComponent(taotaosou.extension.getOSFromUseragent()) + "&t=" + localStorage.tts_lasttime_sendstartlog;
+				img.src = "http://dc.log1.taotaosou.com/statistics.do?systemName=ttk_plugin_load&url=1&browser=" + taotaosou.extension.config.data.source + "&os=" + encodeURIComponent(taotaosou.extension.getOSFromUseragent()) + "&qdid=" + taotaosou.extension.config.data.qdid + "&guid=" + taotaosou.extension.config.data.guid +"&ver=" + taotaosou.extension.config.data.version +"&t=" + localStorage.tts_lasttime_sendstartlog;
 				img.width = "0";
 				img.height = "0";
 				img.setAttribute('style', "display: none;");
@@ -330,10 +305,8 @@ taotaosou.extension.getOSFromUseragent = function(){
 						id: '',
 						nick: ''
 					}
+					chrome.browserAction.setIcon({path: "img/icon.png"});
 					chrome.browserAction.setPopup({popup: ""});
-					chrome.browserAction.setBadgeText({text: "?"});
-					chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
-					chrome.browserAction.setIcon({path: "../img/icon.png"});
 					try {
 						var pluginData = taotaosou.extension.config.getClientUseId();
 						//获取不到客户端的id使用临时帐号登陆
@@ -344,7 +317,6 @@ taotaosou.extension.getOSFromUseragent = function(){
 								success: function (data) {
 									tkData.id = data.id;
 									tkData.tip = 0;
-									localStorage.setItem('TK-user-data', JSON.stringify(tkData));
 								}
 							});
 						}
@@ -360,109 +332,93 @@ taotaosou.extension.getOSFromUseragent = function(){
 										id: data.user.id,
 										nick: data.user.nick
 									}
-									chrome.browserAction.setBadgeText({text: ""});
-									chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
-									chrome.browserAction.setIcon({path: "../img/icon.png"});
-									chrome.browserAction.setPopup({popup: "html/popup.html"});
-									localStorage.setItem('TK-user-data', JSON.stringify(tkData));
+									chrome.browserAction.setIcon({path: "img/icon.png"});
+									chrome.browserAction.setPopup({popup: "html/popup.html", width: 420, height: 598 });
 								}
 							});
 						}
 					} catch (err) {
 						console.log(err);
 					}
-				}
-				else {
+				} else {
 					tkData = {
 						status: data.status,
 						id: data.user.id,
 						nick: data.user.nick
 					}
-					chrome.browserAction.setBadgeText({text: ""});
-					chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
-					chrome.browserAction.setIcon({path: "../img/icon.png"});
-					chrome.browserAction.setPopup({popup: "html/popup.html"});
-					localStorage.setItem('TK-user-data', JSON.stringify(tkData));
-					//当是自己登陆给客户端发送消息
+					chrome.browserAction.setIcon({path: "img/icon.png"});
+					chrome.browserAction.setPopup({popup: "html/popup.html", width: 420, height: 598 });
+					//登陆成功给客户端发送消息
 					sentClientData(JSON.stringify({
-						status: tkData.status,  //1:login; 0:logout;
-						bower: taotaosou.extension.config.data.source,
-						uid: tkData.id
+						status:tkData.status,  //1:login; 0:logout;
+						bower:taotaosou.extension.config.data.browser,
+						uid:data.user.id
 					}));
 				}
+				localStorage.setItem('TK-user-data', JSON.stringify(tkData));
 			}
 		});
 		_this.tkData = JSON.parse(localStorage.getItem('TK-user-data'));
+
 		chrome.browserAction.onClicked.addListener(function () {
 			_this.updataIcon();
 		});
+		if (_this.tkData && _this.tkData.status === 1) {
+			_this.socket();
+		}
 	}
+	getData.prototype.socket = function () {
+		var ws = new WebSocket("ws://messagedcg.taotaosou.com:843/");
 
+		// Set event handlers.
+		ws.onopen = function () {
+
+			ws.send('{ "xip": 100001, "data": { "userId": ' + JSON.parse(localStorage.getItem('TK-user-data')).id + ', "clientId": ' + 7 + ' } }');
+		};
+		ws.onmessage = function (e) {
+			ws.send(' {"xip": 200001, "data": { "notifyId": ' + $.parseJSON(e.data).notifyId + ', "userId": ' + JSON.parse(localStorage.getItem('TK-user-data')).id + ', "clientId": ' + 7 + ' } } ');
+
+			var data = JSON.parse(e.data), msgList = data.list;
+			if (msgList.length === 0) {
+				return false;
+			}
+
+			for (var i = 0, len = msgList.length; i < len; i++) {
+				if (msgList[i].id === 1 || msgList[i].id === 11 || msgList[i].id === 18) {
+					//if (msgList[i].id === 1) {
+					if (msgList[i].count > 0) {
+						;chrome.browserAction.setBadgeText({text: "·"});
+						break;
+					}
+				}
+			}
+		};
+	}
 	getData.prototype.updataIcon = function () {
-		var urlReg = new RegExp(/^http:.*$/),
-			userData = localStorage.getItem('TK-user-data');
+		var urlReg = new RegExp(/^http:.*$/);
 		chrome.browserAction.setPopup({popup: ""});
 		//点击埋点
 		$.ajax({
 			url: "http://log.taotaosou.com/browser_statistics.do?type=drawer_icon_click&t=" + new Date().getTime()
 		});
-		try {
-			if (!userData || JSON.parse(userData).status == 0) {
-				chrome.tabs.getSelected(null, function (data) {
-					if (urlReg.test(data.url)) {
-						chrome.tabs.executeScript(null, {file: "js/login/login.js"});
-					} else {
-						chrome.tabs.create({
-							url: 'http://tk.taotaosou.com'
-						}, function () {
-							chrome.tabs.executeScript(null, {file: "js/login/login.js"});
-						});
-					}
-				});
-			} else {
-				chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
-				chrome.browserAction.setPopup({popup: "html/popup.html"});
-			}
+		//alert(localStorage.getItem('TK-user-data'));
+		if (JSON.parse(localStorage.getItem('TK-user-data')).status === 0) {
+			chrome.tabs.getSelected(null, function (data) {
+				if (urlReg.test(data.url)) {
+					chrome.tabs.executeScript(null, {file: "js/login/login.js"});
+				} else {
+					chrome.tabs.create({
+						url: 'http://tk.taotaosou.com',
+						selected: true
+					}, function ( tab ) {
+						nTabId = tab.id;
+					});
+				}
+			});
+		} else {
+			chrome.browserAction.setPopup({popup: "html/popup.html", width: 420, height: 598 });
 
-		} catch (err) {
-			console.log(err);
 		}
-
 	}
-
-
-	//登陆退出 监听cookie
-	chrome.cookies.onChanged.addListener(function (data) {
-		if (data.cause.match(/overwrite/) && data.removed) {
-			if (data.cookie.name === 'tts_userId') {
-				chrome.browserAction.setPopup({popup: ""});
-				chrome.browserAction.setBadgeText({text: "?"});
-				chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
-				chrome.browserAction.setIcon({path: "../img/icon.png"});
-				localStorage.setItem('TK-user-data', JSON.stringify({"command": "cmdUpdateState", "status": 0}));
-			}
-		} else if (data.cause.match(/explicit/) && !data.removed) {
-			if (data.cookie.name === 'tts_userId') {
-				chrome.browserAction.setBadgeText({text: ""});
-				chrome.browserAction.setBadgeBackgroundColor({color: "#ff0000"});
-				chrome.browserAction.setIcon({path: "../img/icon.png"});
-				chrome.browserAction.setPopup({popup: "html/popup.html"});
-				localStorage.setItem('TK-user-data', JSON.stringify({"command": "cmdUpdateState", "status": 1, "id": data.cookie.value}));
-				sentClientData(JSON.stringify({
-					status: 1,  //1:login; 0:logout;
-					bower: taotaosou.extension.config.data.source,
-					uid: data.cookie.value
-				}));
-			}
-		}
-	});
-
-	//自动登录接口：http://www.taotaosou.com/uc/clientAutoLogin?callback=?&uid=xxx&sig=xxx
-
-	//向content推送登陆状态
-	chrome.runtime.onConnect.addListener(function (port) {
-		if(port && port.name == 'userStatus' ) {
-			port.postMessage(localStorage.getItem('TK-user-data'));
-		}
-	});
 })(window, jQuery);
+
