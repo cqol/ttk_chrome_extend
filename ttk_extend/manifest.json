@@ -9,12 +9,12 @@
             "js": ["js/lib/jquery.js", "js/content.js"],
             "matches": [ "http://*/*" ],
             "run_at": "document_end"
-        } ,	
+        } ,
 	    {
             "js": ["js/content_start.js"],
             "matches": [ "http://*.taotaosou.com/*" ],
             "run_at": "document_start"
-        }	
+        }
     ],
 
     "web_accessible_resources": [
@@ -30,6 +30,6 @@
     },
     "name": "淘淘搜比价(淘同款)",
     "permissions": [ "tabs", "http://*/*", "https://*/*", "cookies", "unlimitedStorage", "storage" ],
-    "version": "1.4.1",
+    "version": "2.0.0",
     "update_url": "http://clients2.google.com/service/update2/crx"
 }
