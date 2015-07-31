@@ -1,4 +1,5 @@
 ﻿(function (win) {
+	console.log('1!int center');
 	var isFrame = function () {
 		if (win.self !== top) {
 			return true;
