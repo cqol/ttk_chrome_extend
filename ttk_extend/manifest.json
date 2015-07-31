@@ -1,35 +1,30 @@
 ﻿{
-    "manifest_version": 2,
-    "browser_action": {
-        "default_icon": "img/icon-non.png",
-        "default_title": "淘淘搜比价(淘同款)"
-    },
-    "content_scripts": [
-        {
-            "js": ["js/lib/jquery.js", "js/content.js"],
-            "matches": [ "http://*/*" ],
-            "run_at": "document_end"
-        } ,
-	    {
-            "js": ["js/content_start.js"],
-            "matches": [ "http://*.taotaosou.com/*" ],
-            "run_at": "document_start"
-        }
-    ],
+  "manifest_version": 2,
+  "browser_action": {
+    "default_icon": "img/icon.png",
+    "default_title": "淘淘搜比价(淘同款)"
+  },
+  "content_scripts": [
+    {
+      "js": ["js/content.js"],
+      "matches": [ "http://*/*","https://*/*" ],
+      "run_at": "document_end"
+    }
+  ],
 
-    "web_accessible_resources": [
-        "js/login/loginFrame.js",
-        "js/lib/jquery.js"
-    ],
-    "background": {
-        "page": "html/background.html"
-    },
-    "description": "淘淘搜比价(淘同款)是畅行淘宝和天猫的强大利器。它通过图像搜索技术为你迅速找出同款或相似款的商品，方便你进行比价和挑选，将省钱进行到底！",
-    "icons": {
-        "128": "img/icon-128.png"
-    },
-    "name": "淘淘搜比价(淘同款)",
-    "permissions": [ "tabs", "http://*/*", "https://*/*", "cookies", "unlimitedStorage", "storage" ],
-    "version": "2.0.0",
-    "update_url": "http://clients2.google.com/service/update2/crx"
+  "web_accessible_resources": [
+    "js/*"
+  ],
+
+  "background": {
+    "page": "html/background.html"
+  },
+  "description": "淘淘搜比价(淘同款)是畅行淘宝和天猫的强大利器。它通过图像搜索技术为你迅速找出同款或相似款的商品，方便你进行比价和挑选，将省钱进行到底！",
+  "icons": {
+    "128": "img/icon-128.png"
+  },
+  "name": "淘淘搜比价(淘同款)",
+  "permissions": [ "tabs", "http://*/*", "https://*/*", "cookies", "unlimitedStorage", "storage" ],
+  "version": "2.0.0",
+  "update_url": "http://clients2.google.com/service/update2/crx"
 }
