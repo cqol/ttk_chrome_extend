@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension>
+    <id>com.taotaosou.taotongkuan</id>
+    <name>淘同款购物助手</name>
+    <author>淘淘搜</author>
+    <show_icon>true</show_icon>
+    <description>淘同款是畅行淘宝和天猫的强大利器。它通过图像搜索技术为你迅速找出同款或相似款的商品，方便你进行比价和挑选，将省钱进行到底！</description>
+    <background page="html/background.html"/>
+
+    <content_scripts>
+        <content_script>
+            <match>https://*.taobao.com/*</match>
+            <match>http://*.taobao.com/*</match>
+            <match>https://*.tmall.com/*</match>
+            <match>http://*.tmall.com/*</match>
+            <match>http://weibo.com/*</match>
+            <match>http://*.meilishuo.com/*</match>
+            <match>http://*.taotaosou.com/*</match>
+            <match>http://*.mogujie.com/*</match>
+            <match>http://*.baidu.com/*</match>
+            <match>http://*.qzone.com/*</match>
+            <js>js/content.js</js>
+        </content_script>
+
+        <content_script>
+            <match>http://*.qq.com/*</match>
+            <match>http://*.sina.com.cn/*</match>
+            <match>http://*.163.com/*</match>
+            <match>http://*.sohu.com/*</match>
+            <match>http://*.rayli.com/*</match>
+            <match>http://*.alili.com/*</match>
+            <match>http://*.ellechina.com/*</match>
+            <match>http://*.yoka.com/*</match>
+            <match>http://*.ifeng.com/*</match>
+            <match>http://*.babytree.com/*</match>
+            <match>http://*.duowan.com/*</match>
+            <match>http://*.17173.com/*</match>
+            <match>http://*.4399.com/*</match>
+            <match>http://*.7k7k.com/*</match>
+            <js>js/content.js</js>
+        </content_script>
+
+    </content_scripts>
+    <permissions>
+        <permission>history</permission>
+        <permission>tabs</permission>
+        <permission>storage</permission>
+        <permission>unlimitedStorage</permission>
+        <permission>cookies</permission>
+        <permission>http://*/*</permission>
+        <permission>https://*/*</permission>
+    </permissions>
+    <version>1.3.2</version>
+    <request_api_version>1</request_api_version>
+</extension>

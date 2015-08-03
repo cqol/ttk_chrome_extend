@@ -1,5 +1,6 @@
 __tk__define(function (require, exports, module) {
 	// 本地cookie的读写工具
+
 	var cookieUtil = {
 		get: function () {
 			var cookie = {},
@@ -628,9 +629,9 @@ __tk__define(function (require, exports, module) {
 		domainMatchs = host.match(domainReg),
 		domainName = host;
 
-	/*if (domainMatchs !== null && domainMatchs[1] && domainMatchs[1].indexOf('.') !== -1) {
+	if (domainMatchs !== null && domainMatchs[1] && domainMatchs[1].indexOf('.') !== -1) {
 	 domainName = domainMatchs[1];
-	 }*/
+	 }
 
 	function showPaopao(data, times, cookieName) {
 		//开启js广告

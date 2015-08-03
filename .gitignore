@@ -1,6 +1,14 @@
 # window:
 .gitigore
 .idea
-dist/*
+.sass-cache
 node_modules
-.DS_Store
+build
+copy
+dist
+src/taobao/js/sea.js
+src/taobao/scss/**/*.css
+src/taobao/css/bijia
+npm-debug.log
+src/bower_components
+*.DS_Store

@@ -325,7 +325,7 @@
 			.replace(/.*AppleWebKit\/(\d+)\..*/, "$1")) * 1 < 536
 
 
-	function request(url, callback, charset){
+	/*function request(url, callback, charset){
 		var isCSS = IS_CSS_RE.test(url)
 		if(isCSS){
 			var node = doc.createElement("link")
@@ -364,9 +364,8 @@
 			};
 			xhr.send(null);
 		}
-	}
+	}*/
 
-	/*
 	function request(url, callback, charset) {
 		var isCSS = IS_CSS_RE.test(url)
 		var node = doc.createElement(isCSS ? "link" : "script")
@@ -400,7 +399,7 @@
 			head.appendChild(node)
 
 		currentlyAddingScript = undefined
-	}*/
+	}
 
 	function addOnload(node, callback, isCSS) {
 		var missingOnload = isCSS && (isOldWebKit || !("onload" in node))

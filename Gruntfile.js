@@ -1,5 +1,6 @@
 module.exports = function (grunt) {
 	var today = grunt.template.today("yyyy-mm-dd HH:MM:ss");
+	var timestamp = grunt.template.today("mmddHHMM");
 
 	// Project configuration.
 	grunt.initConfig({
@@ -32,11 +33,30 @@ module.exports = function (grunt) {
 					{
 						expand: true,
 						cwd: 'dist/ttk_chrome_extend/js/',
-						src: '*.js',
+						src: '**/*.js',
 						dest: 'dist/ttk_chrome_extend/js/'
 					}
 				]
 			}
+		},
+
+		replace: {
+			sogo: {
+				options: {
+					patterns: [
+						{
+							match: /chrome\./g,
+							replacement: function () {
+								return 'sogouExplorer.'; // replaces "foo" to "bar"
+							}
+						}
+					]
+				},
+				files: [
+					{expand: true, flatten: true, src: ['dist/ttk_chrome_extend/js/background.js'], dest: 'dist/ttk_chrome_extend/js/'},
+					{expand: true, flatten: true, src: ['dist/ttk_chrome_extend/js/content.js'], dest: 'dist/ttk_chrome_extend/js/'}
+				]
+			},
 		},
 		cssmin: {
 			options: {
@@ -57,14 +77,20 @@ module.exports = function (grunt) {
 					{expand: true, cwd: 'ttk_extend/', src: '**/*', dest: 'dist/ttk_chrome_extend/'}
 				]
 			}
-		}
+		},
+		clean: {
+			base: {
+				src: ['copy', 'build', 'dist/ttk_chrome_extend']
+			}
+		},
 	});
 
 	// Load the plugin that provides the "uglify" task.
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-replace');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
-
+	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 
 
@@ -73,10 +99,15 @@ module.exports = function (grunt) {
 	//淘同款入口
 	grunt.registerTask('ttk', 'ttk extend', function () {
 		//grunt.task.run('jshint:ttk');
+		grunt.task.run('clean');
 
 		grunt.task.run('copy:ttk');
-		grunt.task.run('uglify:ttk');
+		//grunt.task.run('uglify:ttk');
 		grunt.task.run('cssmin');
+	});
+
+	grunt.registerTask('sogo', 'ttk extend', function () {
+		grunt.task.run('replace:sogo');
 	});
 
 	// Default task(s).
