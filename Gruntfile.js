@@ -20,21 +20,22 @@ module.exports = function (grunt) {
 
 		uglify: {
 			options: {
-				banner: '/* @date:' + today + ' */\n'
+				banner: '/* @date:' + today + ' */\n',
+				mangle: false
 			},
 			ttk: {
 				files: [
 					{
 						expand: true,
-						cwd: 'dist/ttk_chrome_extend/js/login/',
+						cwd: 'dist/ttk_sogo_extend/js/login/',
 						src: '*.js',
-						dest: 'dist/ttk_chrome_extend/js/login/'
+						dest: 'dist/ttk_sogo_extend/js/login/'
 					},
 					{
 						expand: true,
-						cwd: 'dist/ttk_chrome_extend/js/',
+						cwd: 'dist/ttk_sogo_extend/js/',
 						src: '**/*.js',
-						dest: 'dist/ttk_chrome_extend/js/'
+						dest: 'dist/ttk_sogo_extend/js/'
 					}
 				]
 			}
@@ -53,8 +54,8 @@ module.exports = function (grunt) {
 					]
 				},
 				files: [
-					{expand: true, flatten: true, src: ['dist/ttk_chrome_extend/js/background.js'], dest: 'dist/ttk_chrome_extend/js/'},
-					{expand: true, flatten: true, src: ['dist/ttk_chrome_extend/js/content.js'], dest: 'dist/ttk_chrome_extend/js/'}
+					{expand: true, flatten: true, src: ['dist/ttk_sogo_extend/js/background.js'], dest: 'dist/ttk_sogo_extend/js/'},
+					{expand: true, flatten: true, src: ['dist/ttk_sogo_extend/js/content.js'], dest: 'dist/ttk_sogo_extend/js/'}
 				]
 			},
 		},
@@ -64,9 +65,9 @@ module.exports = function (grunt) {
 			},
 			minify: {
 				expand: true,
-				cwd: 'dist/ttk_chrome_extend/css/',
+				cwd: 'dist/ttk_sogo_extend/css/',
 				src: ['*.css'],
-				dest: 'dist/ttk_chrome_extend/css/',
+				dest: 'dist/ttk_sogo_extend/css/',
 				ext: '.css'
 			}
 		},
@@ -74,13 +75,13 @@ module.exports = function (grunt) {
 			ttk: {
 				files: [
 
-					{expand: true, cwd: 'ttk_extend/', src: '**/*', dest: 'dist/ttk_chrome_extend/'}
+					{expand: true, cwd: 'ttk_extend/', src: '**/*', dest: 'dist/ttk_sogo_extend/'}
 				]
 			}
 		},
 		clean: {
 			base: {
-				src: ['copy', 'build', 'dist/ttk_chrome_extend']
+				src: ['copy', 'build', 'dist/ttk_sogo_extend']
 			}
 		},
 	});
@@ -89,7 +90,6 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-replace');
-	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 
@@ -102,8 +102,10 @@ module.exports = function (grunt) {
 		grunt.task.run('clean');
 
 		grunt.task.run('copy:ttk');
-		//grunt.task.run('uglify:ttk');
+		grunt.task.run('uglify:ttk');
 		grunt.task.run('cssmin');
+		grunt.task.run('replace:sogo');
+
 	});
 
 	grunt.registerTask('sogo', 'ttk extend', function () {

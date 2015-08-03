@@ -13,9 +13,15 @@
             <match>http://*.taobao.com/*</match>
             <match>https://*.tmall.com/*</match>
             <match>http://*.tmall.com/*</match>
+            <match>http://*.jd.com/*</match>
+            <match>http://*.suning.com/*</match>
+            <match>http://*.gome.com.cn/*</match>
+            <match>http://*.amazon.cn/*</match>
+            <match>http://*.vip.com/*</match>
+            <match>http://*.dangdang.com/*</match>
+            <match>http://*.paipai.com/*</match>
             <match>http://weibo.com/*</match>
             <match>http://*.meilishuo.com/*</match>
-            <match>http://*.taotaosou.com/*</match>
             <match>http://*.mogujie.com/*</match>
             <match>http://*.baidu.com/*</match>
             <match>http://*.qzone.com/*</match>
