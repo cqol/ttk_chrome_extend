@@ -33,16 +33,17 @@ __tk__define(function (require, exports, module) {
 
   // 发送埋点
   GA.trackEvent = function (type) {
-    $.getScript("//log.taotaosou.com/browser_statistics.do?type=" + prefix + '_' + type);
+		utils.stat(prefix + '_' + type);
+    //$.getScript("//log.taotaosou.com/browser_statistics.do?type=" + prefix + '_' + type);
   };
 	// 发送日志
 	GA.trackLog = function (type) {
-		$.getScript("//dclog.taotaosou.com/statistics.do?systemName=ttk_bottomtab" +
-			"&type=" + type +
-			"&website=" + host.webSite  +
-			"&host=" + prefix +
-			"&guid=" + utils.GUID +
-			"&ditch=" + utils.DITCH_ID);
+		utils.statLog_one({
+			systemName: 'ttk_bottomtab',
+			type: type,
+			website: host.webSite,
+			host: prefix
+		});
 	};
 
   return GA;
