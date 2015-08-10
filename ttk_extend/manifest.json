@@ -6,7 +6,7 @@
   },
   "content_scripts": [
     {
-      "js": ["js/content.js"],
+      "js": ["js/lib/jquery.js","js/content.js"],
       "matches": [ "http://*/*","https://*/*" ],
       "run_at": "document_end"
     }
