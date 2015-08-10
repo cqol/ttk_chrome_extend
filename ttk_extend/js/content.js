@@ -59,6 +59,28 @@
 		})(window, '__tk__seajs', document);
 	}
 
+	function loadCSS(url) {
+		//加载 css 文件，
+		//IE6 下无法使用 `innerHTML` <link> 标签，
+		//所以这里改用 `createElement`。
+		var head = document.head || document.getElementsByTagName('head')[0],
+			link = document.createElement('link');
+
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+
+		//Add timestamp
+		if (url.match(/\?t=/) || url.match(/&t=/)) {
+			url = url;
+		} else {
+			url += '?t=150811';
+		}
+
+		link.href = url;
+
+		head.appendChild(link);
+	}
+
 	/**
 	 * 使用 <script> 加载资源
 	 * 用来加载 .js 文件和记录埋点
@@ -296,7 +318,9 @@
 	function taobao() {
 		try {
 			var loadTTK = chrome.extension.getURL('js/taobao/js/ttk.js');
+			var taobaoCSS = chrome.extension.getURL('css/taobao.css');
 			loadSeajs(seaJS, function () {
+				loadCSS(taobaoCSS);
 				load(loadTTK);
 			});
 		} catch (e) {
@@ -327,6 +351,8 @@
 		if (!href.match(/hzwuzhou|chaoji99|etao|alipay|zhifubao|alimama|alibaba|360safe.com|ie.sogou.com|liebao.cn|maxthon.cn|chrome.google.com\/webstore/)) {
 			if (!getCenterData().id.match(/B611040020150619/)) {
 				var tmtSrc = chrome.extension.getURL('js/tmt/tmt.js');
+				var tmtCSS = chrome.extension.getURL('css/tmt.css');
+				loadCSS(tmtCSS);
 				load(tmtSrc);
 			}
 		}

@@ -80,7 +80,7 @@ __tk__define(function (require, exports, module) {
 		data.z1_guid = GUID;
 		data.ditch = DITCH_ID;
 		data.v = VERSION;
-		utils.load({
+		utils.postImg({
 			url: url,
 			data: data
 		});
@@ -277,7 +277,7 @@ __tk__define(function (require, exports, module) {
 				value = this.site() + '_' + item;
 			}
 
-			new Stat(API_LOG + 'browser_statistics.do', {type: value});
+			new Stat_img(API_LOG + 'browser_statistics.do', {type: value});
 		},
 
 		//### 埋点统计 ###
@@ -287,13 +287,13 @@ __tk__define(function (require, exports, module) {
 		statLog: function (data) {
 			var DCLOG_API_POST = '//dclog.taotaosou.com/statistics.do';
 
-			new Stat(DCLOG_API_POST, data);
+			new Stat_img(DCLOG_API_POST, data);
 		},
 
 		statLog_one: function (data) {
 			var DCLOG_API_POST = '//dclog.taotaosou.com/statistics.do';
 
-			new Stat(DCLOG_API_POST, data);
+			new Stat_img(DCLOG_API_POST, data);
 		},
 
 		statLog_img: function (data) {
