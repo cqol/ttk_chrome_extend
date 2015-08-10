@@ -21,13 +21,20 @@
 	var seaJS = chrome.extension.getURL('js/taobao/js/sea.js');
 	// sea.js 的异步载入代码：
 	function loadSeajs(seaJS, callback) {
-		;(function(m, o, d, u, l, a, r) {
+		;
+		(function (m, o, d, u, l, a, r) {
 			if (m[o]) {
 				win.__tk__define = win.define;
 				return;
 			}
-			function f(n) { return function() { r.push(n, arguments); return a; }; }
-			m[o] = a = { args: (r = []), config: f(1), use: f(2), on: f(3) };
+			function f(n) {
+				return function () {
+					r.push(n, arguments);
+					return a;
+				};
+			}
+
+			m[o] = a = {args: (r = []), config: f(1), use: f(2), on: f(3)};
 			m.TKdefine = f(0);
 			u = d.createElement('script');
 			u.id = o + 'node';
@@ -114,7 +121,8 @@
 	}
 
 	/*var isManualInstall = function () {
-	 if (!getCenterData().id || getCenterData().id.match(/^(0011|0001).*//*)) {
+	 if (!getCenterData().id || getCenterData().id.match(/^(0011|0001).*/
+	/*)) {
 	 return true;
 	 }
 	 return false;
@@ -214,20 +222,9 @@
 
 	var userNick = '',
 		cookie = document.cookie;
-	//从 cookie 读取用户昵称
 	if (cookie.match(/tracknick/)) {
 		userNick = cookie.replace(/.*tracknick=/, '').replace(/;.*/, '');
 	}
-
-	//淘宝天猫detail对应shopid;
-	var shopId = function () {
-		if (host === 'item.taobao.com' || host === 'detail.tmall.com') {
-			if (document.getElementById('LineZing')) {
-				return document.getElementById('LineZing').getAttribute('shopid');
-			}
-		}
-		return '';
-	}();
 
 	/**
 	 * 全网监控
@@ -240,8 +237,7 @@
 		'&ref=' + (win.encodeURIComponent(win.document.referrer) || '') +
 		'&sid=' + win.jiayuId +
 		'&z1_guid=' + getCenterData().guid +
-		'&z2_nick=' + win.encodeURIComponent(userNick) +
-		'&z3_shopid=' + shopId;
+		'&z2_nick=' + win.encodeURIComponent(userNick);
 	postImg(ulrTest);
 
 	/**
@@ -298,17 +294,13 @@
 	 * 淘宝版
 	 */
 	function taobao() {
-		var rhost = /qq.com|taobao|tmall|mogujie.com|meilishuo.com|chaoji99.com|jd.com|yhd.com|1mall.com|dangdang.com|suning.com|vjia.com|vancl.com|taotaosou.com|360.cn|douban.com|weibo.com|vip.com|gome.com.cn|amazon.cn|jiuxian.com|jumei.com|zhe800.com|nuomi.com|paipai.com|meituan.com/;
-		if (host.match(rhost)) {
-			try {
-				var loadTTK = chrome.extension.getURL('js/taobao/js/ttk.js');
-				loadSeajs(seaJS, function () {
-					load(loadTTK);
-				});
-			} catch (e) {
-				postImg('//log.taotaosou.com/browser_statistics.do?type=center_err');
-			}
-
+		try {
+			var loadTTK = chrome.extension.getURL('js/taobao/js/ttk.js');
+			loadSeajs(seaJS, function () {
+				load(loadTTK);
+			});
+		} catch (e) {
+			postImg('//log.taotaosou.com/browser_statistics.do?type=center_err');
 		}
 	}
 
