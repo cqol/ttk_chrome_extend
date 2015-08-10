@@ -105,13 +105,13 @@ function program8(depth0,data) {
   if (stack1 = helpers.host) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.host; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\">\n  <a class=\"bijia-logo TTS-left\" href=\"http://www.taotaosou.com/\" target=\"_blank\" data-tts-log=\"Bottomtab_logo_click\"></a>\n\n  <div class=\"TTS-products-wrap TTS-left\">\n    <div class=\"TTS-list-left-wrap TTS-left\">\n      <div class=\"TTS-list-left TTS-left\"></div>\n      ";
+    + "\">\n  <a class=\"TTS_logo_bijia bijia-logo TTS-left\" href=\"http://www.taotaosou.com/\" target=\"_blank\" data-tts-log=\"Bottomtab_logo_click\"></a>\n  <div class=\"TTS-products-wrap TTS-left\">\n    <div class=\"TTS-list-left-wrap TTS-left\">\n      <div class=\"TTS-list-left TTS-left\"></div>\n      ";
   stack1 = helpers['if'].call(depth0, depth0.more, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n      <!--";
   stack1 = helpers['if'].call(depth0, depth0.list, {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "-->\n    </div>\n    <!--<div id=\"TTS-group\">\n      <div id=\"KKT-nomore\">\n        <span>限量抢购</span>\n        <em id=\"KKT-arrow\" class=\"bijia-arrow-down\"></em>\n      </div>\n      <a target=\"_blank\" id=\"KKT-bottom-click\" href=\"http://www.chaoji99.com/#gouwu\" data-tts-log=\"_Bottomtab_seckill_click\">\n        <div id=\"KKT-open-tuangou\">\n          <div id=\"KKT-tuan-time\"></div>\n        </div>\n      </a>\n    </div>-->\n  </div>\n  <a class=\"TTS-bijia-min-btn bijia-fold TTS-right\"></a>\n\n  <div class=\"TTS-banner-wrap TTS-right\">\n  </div>\n  <div class=\"TTS-list-right-wrap TTS-tuan TTS-right\">\n    <div class=\"TTS-list-right TTS-tumeiti TTS-left\"></div>\n  </div>\n</div>";
+  buffer += "-->\n    </div>\n    <!--<div id=\"TTS-group\">\n      <div id=\"KKT-nomore\">\n        <span>限量抢购</span>\n        <em id=\"KKT-arrow\" class=\"bijia-arrow-down\"></em>\n      </div>\n      <a target=\"_blank\" id=\"KKT-bottom-click\" href=\"http://www.chaoji99.com/#gouwu\" data-tts-log=\"_Bottomtab_seckill_click\">\n        <div id=\"KKT-open-tuangou\">\n          <div id=\"KKT-tuan-time\"></div>\n        </div>\n      </a>\n    </div>-->\n  </div>\n  <a class=\"TTS-bijia-min-btn bijia-fold TTS-right\"></a>\n  <div class=\"TTS-banner-wrap TTS-right\">\n  </div>\n  <div class=\"TTS-list-right-wrap TTS-tuan TTS-right\">\n    <div class=\"TTS-list-right TTS-tumeiti TTS-left\"></div>\n  </div>\n</div>";
   return buffer;
   });
 
@@ -877,13 +877,13 @@ function program8(depth0,data) {
   if (stack1 = helpers.host) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.host; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\">\n  <a class=\"bijia-logo TTS-left\" href=\"http://www.taotaosou.com/\" target=\"_blank\" data-tts-log=\"Bottomtab_logo_click\"></a>\n  <!--\n  <div class=\"TTS-remind-wrap TTS-left\"></div>\n  <div class=\"TTS-qutu-wrap TTS-left\"></div>\n  -->\n  <div class=\"TTS-products-wrap TTS-left\">\n    <div class=\"TTS-list-left-wrap TTS-left\">\n      <div class=\"TTS-list-left TTS-left\"></div>\n      ";
+    + "\">\n  <a class=\"TTS_logo_bijia bijia-logo TTS-left\" href=\"http://www.taotaosou.com/\" target=\"_blank\" data-tts-log=\"Bottomtab_logo_click\"></a>\n  <!--\n  <div class=\"TTS-remind-wrap TTS-left\"></div>\n  <div class=\"TTS-qutu-wrap TTS-left\"></div>\n  -->\n  <div class=\"TTS-products-wrap TTS-left\">\n    <div class=\"TTS-list-left-wrap TTS-left\">\n      <div class=\"TTS-list-left TTS-left\"></div>\n      ";
   stack1 = helpers['if'].call(depth0, depth0.more, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n      ";
   stack1 = helpers['if'].call(depth0, depth0.list, {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n    </div>\n    <!--<div id=\"TTS-group\">\n      <div id=\"KKT-nomore\">\n        <span>限量抢购</span> \n        <em id=\"KKT-arrow\" class=\"bijia-arrow-down\"></em>\n      </div>\n      <a target=\"_blank\" id=\"KKT-bottom-click\" href=\"http://www.chaoji99.com/#gouwu\" data-tts-log=\"_Bottomtab_seckill_click\">\n        <div id=\"KKT-open-tuangou\">\n          <div id=\"KKT-tuan-time\"></div>\n        </div>\n      </a>\n    </div>-->\n  </div>\n  <a class=\"TTS-bijia-min-btn bijia-fold TTS-right\"></a>\n\n  <div class=\"TTS-list-right-wrap TTS-tuan TTS-right\">\n    <div class=\"TTS-list-right TTS-tumeiti TTS-left\"></div>\n  </div>\n</div>";
+  buffer += "\n    </div>\n    <!--<div id=\"TTS-group\">\n      <div id=\"KKT-nomore\">\n        <span>限量抢购</span> \n        <em id=\"KKT-arrow\" class=\"bijia-arrow-down\"></em>\n      </div>\n      <a target=\"_blank\" id=\"KKT-bottom-click\" href=\"http://www.chaoji99.com/#gouwu\" data-tts-log=\"_Bottomtab_seckill_click\">\n        <div id=\"KKT-open-tuangou\">\n          <div id=\"KKT-tuan-time\"></div>\n        </div>\n      </a>\n    </div>-->\n  </div>\n  <a class=\"TTS-bijia-min-btn bijia-fold TTS-right\"></a>\n  <div class=\"TTS-list-right-wrap TTS-tuan TTS-right\">\n    <div class=\"TTS-list-right TTS-tumeiti TTS-left\"></div>\n  </div>\n</div>";
   return buffer;
   });
 
@@ -1329,7 +1329,7 @@ function program1(depth0,data) {
 function program2(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n          <a class=\"TTS-bijia-more-btn juzi-more-same-unclicked TTS-left\" href=";
+  buffer += "\n          <a class=\"TTS-bijia-more-btn juzi-more-same-clicked TTS-left\" href=";
   if (stack1 = helpers.more) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.more; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -1350,7 +1350,7 @@ function program4(depth0,data) {
 function program5(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n            <a class=\"TTS-bijia-more-btn juzi-more-recom-unclicked TTS-left\" href=";
+  buffer += "\n            <a class=\"TTS-bijia-more-btn juzi-more-same-clicked TTS-left\" href=";
   if (stack1 = helpers.more) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.more; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -1371,7 +1371,7 @@ function program7(depth0,data) {
 function program8(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\n          <a class=\"TTS-bijia-more-btn juzi-more-like-unclicked TTS-left\" href=";
+  buffer += "\n          <a class=\"TTS-bijia-more-btn juzi-more-same-clicked TTS-left\" href=";
   if (stack1 = helpers.list) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.list; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -1379,13 +1379,13 @@ function program8(depth0,data) {
   return buffer;
   }
 
-  buffer += "<div id=\"TTS_bijia_wrap\" class=\"JUZI_tts_cooper TTS_bijia_wrap\">\n  <a class=\"juzi-logo TTS-left\" href=\"http://www.taotaosou.com/\" target=\"_blank\" data-tts-log=\"Bottomtab_logo_click\"></a>\n  <div class=\"TTS-qutu-wrap TTS-left\"></div>\n  <div class=\"TTS-products-wrap TTS-left\">\n    <div class=\"TTS-list-left-wrap\">\n      <div class=\"TTS-list-left TTS-left\"></div>\n      ";
+  buffer += "<div id=\"TTS_bijia_wrap\" class=\"JUZI_tts_cooper TTS_bijia_wrap\">\n  <a class=\"TTS_logo_juzi juzi-logo TTS-left\" href=\"http://www.taotaosou.com/\" target=\"_blank\" data-tts-log=\"Bottomtab_logo_click\"></a>\n  <div class=\"TTS-qutu-wrap TTS-left\"></div>\n  <div class=\"TTS-products-wrap TTS-left\">\n    <div class=\"TTS-list-left-wrap\">\n\n      <div class=\"TTS-list-left TTS-left\"></div>\n      ";
   stack1 = helpers['if'].call(depth0, depth0.more, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n      ";
   stack1 = helpers['if'].call(depth0, depth0.list, {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n    </div>\n  </div>\n  <a class=\"TTS-bijia-min-btn juzi-fold TTS-left\"></a>\n  <!--<span class=\"TTS-juzi-logo juzi-juzi-logo\">\n  </span>-->\n</div>";
+  buffer += "\n    </div>\n  </div>\n  <a class=\"TTS-bijia-min-btn juzi-fold TTS-left\"></a>\n  <span class=\"TTS-juzi-logo juzi-juzi-logo\">\n  </span>\n</div>";
   return buffer;
   });
 

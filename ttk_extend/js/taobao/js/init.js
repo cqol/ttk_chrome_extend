@@ -198,7 +198,7 @@ __tk__define(function (require) {
 							cid: Product.getCid(),
 							pid: Product.getID(),
 							userNick: userNick,
-							refer:document.referrer,
+							refer:encodeURIComponent(document.referrer),
 							sum: Product.getPrice()
 						});
 						window.tk_goumai = true;
@@ -216,7 +216,7 @@ __tk__define(function (require) {
 							cid: Product.getCid(),
 							pid: Product.getID(),
 							userNick: userNick,
-							refer:document.referrer,
+							refer:encodeURIComponent(document.referrer),
 							sum: Product.getPrice()
 						});
 						window.tk_shoucang = true;
@@ -233,7 +233,7 @@ __tk__define(function (require) {
 							cid: Product.getCid(),
 							pid: Product.getID(),
 							userNick: userNick,
-							refer:document.referrer,
+							refer:encodeURIComponent(document.referrer),
 							sum: Product.getPrice()
 						});
 						window.tk_sc = true;
@@ -251,7 +251,7 @@ __tk__define(function (require) {
 							cid: Product.getCid(),
 							pid: Product.getID(),
 							userNick: userNick,
-							refer:document.referrer,
+							refer:encodeURIComponent(document.referrer),
 							num: 1,
 							sum: Product.getPrice()
 						});
@@ -284,7 +284,7 @@ __tk__define(function (require) {
 							cid: Product.getCid(),
 							pid: Product.getID(),
 							userNick: userNick,
-							refer:document.referrer,
+							refer:encodeURIComponent(document.referrer),
 							num: 1,
 							sum: Product.getPrice()
 						});
@@ -307,7 +307,7 @@ __tk__define(function (require) {
 						cid: Product.getCid(),
 						pid: Product.getID(),
 						userNick: userNick,
-						refer:document.referrer,
+						refer:encodeURIComponent(document.referrer),
 						sum: Product.getPrice()
 					});
 					window.tk_all_goumai = true;
@@ -324,7 +324,7 @@ __tk__define(function (require) {
 						cid: Product.getCid(),
 						pid: Product.getID(),
 						userNick: userNick,
-						refer:document.referrer,
+						refer:encodeURIComponent(document.referrer),
 						num: 1,
 						sum: Product.getPrice()
 					});
@@ -341,7 +341,7 @@ __tk__define(function (require) {
 						cid: Product.getCid(),
 						pid: Product.getID(),
 						userNick: userNick,
-						refer:document.referrer,
+						refer:encodeURIComponent(document.referrer),
 						num: 1,
 						sum: Product.getPrice()
 					});
@@ -362,7 +362,7 @@ __tk__define(function (require) {
 						cid: Product.getCid(),
 						pid: Product.getID(),
 						userNick: userNick,
-						refer:document.referrer,
+						refer:encodeURIComponent(document.referrer),
 						sum: Product.getPrice()
 					});
 					window.tk_all_goumai = true;
@@ -379,7 +379,7 @@ __tk__define(function (require) {
 						cid: Product.getCid(),
 						pid: Product.getID(),
 						userNick: userNick,
-						refer:document.referrer,
+						refer:encodeURIComponent(document.referrer),
 						sum: Product.getPrice()
 					});
 					window.tk_all_shoucang = true;
@@ -396,7 +396,7 @@ __tk__define(function (require) {
 						cid: Product.getCid(),
 						pid: Product.getID(),
 						userNick: userNick,
-						refer:document.referrer,
+						refer:encodeURIComponent(document.referrer),
 						sum: Product.getPrice()
 					});
 					window.tk_all_sc = true;

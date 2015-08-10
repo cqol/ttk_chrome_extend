@@ -43,7 +43,7 @@ __tk__define(function (require, exports, module) {
 
 		isVipDetail: host === 'www.vip.com' && location.href.match(/detail/),
 		isVipList: host === 'category.vip.com' && location.href.match(/category/),
-		isGMDetail: host === 'www.gome.com.cn' && location.href.match(/product/),
+		isGMDetail: host === 'item.gome.com.cn' || host === 'product.gome.com.cn',
 		isHomeAMX: location.href === 'http://www.amazon.cn/',
 		isAMXDetail: host === 'www.amazon.cn' && (location.href.match(/http:\/\/www.amazon.cn\/.*?\/dp\/(\w+)\/.*?/) ||
 		location.href.match(/http:\/\/www.amazon.cn\/dp\/(\w+)\/.*?/) ||

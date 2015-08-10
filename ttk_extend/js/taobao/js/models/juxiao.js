@@ -82,7 +82,7 @@ __tk__define(function (require, exports, module) {
 							if (mediav[0]) {
 								$.each(mediav, function (i, item) {
 									item[1].clickUrl = item[1].curl1;
-									item[1].picUrl = item[1].pimg;
+									item[1].picUrl = item[1].timg;
 									item[1].title = item[1].pn;
 									item[1].ttsid = 0;
 									item[1].sourceId = "0";

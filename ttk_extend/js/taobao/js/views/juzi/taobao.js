@@ -59,6 +59,7 @@ __tk__define(function (require, exports, module) {
 		attachViewEvent: function() {
 			var self = this;
 
+			var juziLogo = $(".TTS-juzi-logo");
 			// 比价框展开收起按钮
 			$body.on("click", ".TTS-bijia-min-btn", function() {
 				if ($(this).hasClass("juzi-fold")) {
@@ -68,16 +69,17 @@ __tk__define(function (require, exports, module) {
 				}
 				$(this).toggleClass("juzi-fold juzi-unfold");
 				self.$el.toggleClass("juzi-min", $(this).hasClass("juzi-unfold"));
+				self.$el.find(".TTS_logo_juzi").toggleClass("juzi-unlogo", $(this).hasClass("juzi-unfold"));
 			});
 
 			// 更多同款按钮点击
-			$body.one("click", ".TTS-bijia-more-btn", function() {
+			/*$body.one("click", ".TTS-bijia-more-btn", function() {
 				if ($(this).hasClass("juzi-more-same-unclicked")) {
 					$(this).removeClass("juzi-more-same-unclicked").addClass("juzi-more-same-clicked");
 				} else {
 					$(this).removeClass("juzi-more-recom-unclicked").addClass("juzi-more-recom-clicked");
 				}
-			});
+			});*/
 
 			// 同款/推荐list商品弹出浮层
 			$body.on("mouseenter", ".TTS-list-left-wrap li", function() {

@@ -2,17 +2,7 @@
   var $ = require('../lib/jquery'),
     getJSONP = require('./jsonp'),
     utils = require('../utils'),
-    prefix = {
-			app: 'TK-',
-			btn: 'TK-button',
-			logo: 'TK-logo-icon',
-			$id: function(selector) {
-				return $('#' + prefix + selector);
-			},
-			$cls: function(selector) {
-				return $('.' + prefix + selector);
-			}
-		},
+    prefix = require('../views/prefix'),
     _ = require('../lib/underscore'),
     api = require('./api'),
     Product = require('../product'),

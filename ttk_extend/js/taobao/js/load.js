@@ -43,6 +43,7 @@ __tk__define(function (require, exports) {
 		'www.vip.com',
 		'category.vip.com',
 		'www.gome.com.cn',
+		'item.gome.com.cn',
 		'www.amazon.cn',
 		'order.meilishuo.com',
 		'cart.vip.com',

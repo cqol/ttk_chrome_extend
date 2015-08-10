@@ -5,7 +5,7 @@ __tk__define(function (require, exports, module) {
 
     host = require('../host'),
 
-    prefix = {         app: 'TK-',         btn: 'TK-button',         logo: 'TK-logo-icon',         $id: function(selector) {             return $('#' + 'TK-' + selector);         },         $cls: function(selector) {             return $('.' + 'TK-' + selector);         }     },
+    prefix = require('./prefix'),
 
     model = require('../models/models'),
     templates = require('../templates'),

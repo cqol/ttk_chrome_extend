@@ -3,7 +3,7 @@ __tk__define(function (require, exports, module) {
         _ = require('../lib/underscore.js'),
         Product = require('../product'),
 
-        prefix = {         app: 'TK-',         btn: 'TK-button',         logo: 'TK-logo-icon',         $id: function(selector) {             return $('#' + 'TK-' + selector);         },         $cls: function(selector) {             return $('.' + 'TK-' + selector);         }     },
+        prefix = require('./prefix'),
         templates = require('../templates'),
         list,
         fragment,

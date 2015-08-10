@@ -9,7 +9,7 @@ __tk__define(function (require, exports, module) {
 	// 是否是自主安装渠道
 		isManualDId,
 
-		//版本号
+	//版本号
 		VERSION,
 
 		GUID,
@@ -790,11 +790,15 @@ __tk__define(function (require, exports, module) {
 		},
 		//ip取地区 return string;
 		ipLocalCity: function () {
-			if (localStorage && !this.isHttps()) {
-				if (localStorage.getItem('TK-city')) {
+			if (typeof localStorage === 'undefined' || !localStorage) {
+				return '';
+			}
+			else if (localStorage && !this.isHttps()) {
+				if (localStorage.getItem('TK-city') || localStorage.getItem('TK-city') === '') {
 					return localStorage.getItem('TK-city');
 				} else {
-					$.getJSON('http://api.map.baidu.com/location/ip?ak=4UWqs78fXVFsOGDV6qDdBW1i&callback=?', function (data) {
+					$.getJSON('//showkc.taotaosou.com/convert.do?guid=' + GUID +
+						'&callback=?&p=http', function (data) {
 						if (!data) {
 							return '';
 						}
@@ -804,7 +808,7 @@ __tk__define(function (require, exports, module) {
 					return '';
 				}
 			} else if (localStorage && this.isHttps()) {
-				if (localStorage.getItem('TK-city')) {
+				if (localStorage.getItem('TK-city') || localStorage.getItem('TK-city') === '') {
 					return localStorage.getItem('TK-city');
 				} else {
 					$.getJSON('//showkc.taotaosou.com/convert.do?guid=' + GUID +
