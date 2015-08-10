@@ -7,10 +7,10 @@ __tk__define(function(require, exports, module) {
         btn: 'TK-button',
         logo: 'TK-logo-icon',
         $id: function(selector) {
-            return $('#' + 'TK-' + selector);
+            return $('#' + prefix + selector);
         },
         $cls: function(selector) {
-            return $('.' + 'TK-' + selector);
+            return $('.' + prefix + selector);
         }
     };
 });

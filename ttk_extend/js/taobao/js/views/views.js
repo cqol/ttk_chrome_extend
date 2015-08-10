@@ -3,17 +3,7 @@ __tk__define(function (require, exports, module) {
 	var win = window,
 
 		$ = require('../lib/jquery'),
-		prefix = {
-			app: 'TK-',
-			btn: 'TK-button',
-			logo: 'TK-logo-icon',
-			$id: function(selector) {
-				return $('#' + 'TK-' + selector);
-			},
-			$cls: function(selector) {
-				return $('.' + 'TK-' + selector);
-			}
-		},
+		prefix = require('../views/prefix'),
 		host = require('../host'),
 		utils = require('../utils'),
 		event = require('./event.handle'),
@@ -264,7 +254,6 @@ __tk__define(function (require, exports, module) {
 		}
 
 		if (config.taobao.def) {
-			utils.loadCSS('//exts.taotaosou.com/browser-static/taobao/css/bijia/taobao.css');
 
 			//购物车
 			if (host.isTBCart || host.isTMCart || host.isJDCart ||

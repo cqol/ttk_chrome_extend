@@ -281,7 +281,11 @@ __tk__define(function (require) {
 				title = $('#productMainName').attr('title');
 			//} else if (J.host.isSuningList && $(img).parent().next().hasClass('inforBg')) {
 			} else if (J.host.isSuningList) {
-				title = img.alt;
+				if (this.box.closest('.item')[0]) {
+					title = this.box.closest('.item').find('.i-name').text();
+				} else {
+					title = img.alt;
+				}
 			} else if (J.host.isMGJDetail) {
 				if ($('.goods-title')[0]) {
 					title = $('.goods-title').text();
@@ -320,7 +324,11 @@ __tk__define(function (require) {
 				}
 			}
 			else if (J.host.isSuningDetail) {
-				title = $('.product-main-title h1').text();
+				if (document.getElementById('itemDisplayName')) {
+					title = $('#itemDisplayName').text();
+				} else {
+					title = $('#productDisplayName').text();
+				}
 			}
 			else if (J.host.isB2CDetail) {
 				//title = docTitle.replace('-京东商城', '');
@@ -720,6 +728,10 @@ __tk__define(function (require) {
 				if (this.box.closest('.proInfoBox')[0]) {
 					price = this.box.closest('.proInfoBox').find('.proPrice .fl').text() + '00';
 				}
+			} else if (J.host.isSuningList) {
+				if (this.box.closest('.item')[0]) {
+					price = this.box.closest('.item').find('.price strong').text();
+				}
 			}
 			if (J.host.isVanclDetail) {
 				if ($('.cuxiaoPrice')[0]) {
@@ -736,12 +748,14 @@ __tk__define(function (require) {
 				}
 			}
 			if (J.host.isSuningDetail) {
-				if (document.getElementById('promotionPrice')) {
-					price = $('#promotionPrice em').text();
+				if (document.getElementById('promoPrice')) {
+					price = $('#promoPrice').text();
+				} else if (document.getElementById('promotionPrice')){
+					price = $('#promotionPrice').text();
 				}
 			} else if (J.host.isGMDetail) {//prdPrice
 				if (document.getElementById('prdPrice')) {
-					price = $('#prdPrice').text() + '00';
+					price = $('#prdPrice').text();
 				}
 			} else if (J.host.isVjiaDetial) {
 				if (document.getElementById('SpecialPrice')) {

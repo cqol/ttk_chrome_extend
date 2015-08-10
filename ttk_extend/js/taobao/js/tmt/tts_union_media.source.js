@@ -529,7 +529,6 @@
 		function init_media() {
 			TTSUI(document).ready(function () {
 				var hashTimer = null;
-				loadCSS('//exts.taotaosou.com/browser-static/tmt/tmt.css?t=@@timestamp');
 				getConfig();
 				//TODO: 给 IE6/7 模拟 haschange 事件，封装到 $(window).bind('hashchange')
 				//改变hash值 重新去图片

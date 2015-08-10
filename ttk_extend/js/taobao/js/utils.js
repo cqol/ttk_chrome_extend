@@ -9,7 +9,7 @@ __tk__define(function (require, exports, module) {
 	// 是否是自主安装渠道
 		isManualDId,
 
-		//版本号
+	//版本号
 		VERSION,
 
 		GUID,
@@ -80,7 +80,7 @@ __tk__define(function (require, exports, module) {
 		data.z1_guid = GUID;
 		data.ditch = DITCH_ID;
 		data.v = VERSION;
-		utils.load({
+		utils.postImg({
 			url: url,
 			data: data
 		});
@@ -277,7 +277,7 @@ __tk__define(function (require, exports, module) {
 				value = this.site() + '_' + item;
 			}
 
-			new Stat(API_LOG + 'browser_statistics.do', {type: value});
+			new Stat_img(API_LOG + 'browser_statistics.do', {type: value});
 		},
 
 		//### 埋点统计 ###
@@ -287,13 +287,13 @@ __tk__define(function (require, exports, module) {
 		statLog: function (data) {
 			var DCLOG_API_POST = '//dclog.taotaosou.com/statistics.do';
 
-			new Stat(DCLOG_API_POST, data);
+			new Stat_img(DCLOG_API_POST, data);
 		},
 
 		statLog_one: function (data) {
 			var DCLOG_API_POST = '//dclog.taotaosou.com/statistics.do';
 
-			new Stat(DCLOG_API_POST, data);
+			new Stat_img(DCLOG_API_POST, data);
 		},
 
 		statLog_img: function (data) {
@@ -790,11 +790,15 @@ __tk__define(function (require, exports, module) {
 		},
 		//ip取地区 return string;
 		ipLocalCity: function () {
-			if (localStorage && !this.isHttps()) {
-				if (localStorage.getItem('TK-city')) {
+			if (typeof localStorage === 'undefined' || !localStorage) {
+				return '';
+			}
+			else if (localStorage && !this.isHttps()) {
+				if (localStorage.getItem('TK-city') || localStorage.getItem('TK-city') === '') {
 					return localStorage.getItem('TK-city');
 				} else {
-					$.getJSON('http://api.map.baidu.com/location/ip?ak=4UWqs78fXVFsOGDV6qDdBW1i&callback=?', function (data) {
+					$.getJSON('//showkc.taotaosou.com/convert.do?guid=' + GUID +
+						'&callback=?&p=http', function (data) {
 						if (!data) {
 							return '';
 						}
@@ -804,7 +808,7 @@ __tk__define(function (require, exports, module) {
 					return '';
 				}
 			} else if (localStorage && this.isHttps()) {
-				if (localStorage.getItem('TK-city')) {
+				if (localStorage.getItem('TK-city') || localStorage.getItem('TK-city') === '') {
 					return localStorage.getItem('TK-city');
 				} else {
 					$.getJSON('//showkc.taotaosou.com/convert.do?guid=' + GUID +

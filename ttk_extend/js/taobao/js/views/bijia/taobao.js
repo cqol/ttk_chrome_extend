@@ -68,7 +68,8 @@ __tk__define(function (require, exports, module) {
         }
         $(this).toggleClass("bijia-fold bijia-unfold");
         self.$el.toggleClass("bijia-min", $(this).hasClass("bijia-unfold"));
-      });
+				self.$el.find(".TTS_logo_bijia").toggleClass("bijia-unlogo", $(this).hasClass("bijia-unfold"));
+			});
 
       // 更多同款按钮点击
       $body.one("click", ".TTS-bijia-more-btn", function() {

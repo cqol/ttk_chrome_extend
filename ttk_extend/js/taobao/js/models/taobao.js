@@ -3,17 +3,7 @@ __tk__define(function (require, exports, module) {
 		host = require('../host'),
 		getJSONP = require('./jsonp'),
 		utils = require('../utils'),
-		prefix = {
-			app: 'TK-',
-			btn: 'TK-button',
-			logo: 'TK-logo-icon',
-			$id: function(selector) {
-				return $('#' + prefix + selector);
-			},
-			$cls: function(selector) {
-				return $('.' + prefix + selector);
-			}
-		},
+		prefix = require('../views/prefix'),
 		_ = require('../lib/underscore'),
 		api = require('./api'),
 		Product = require('../product'),
@@ -23,6 +13,7 @@ __tk__define(function (require, exports, module) {
 	var sameIds,
 		apiData = {};
 
+	var opLocal = false;
 	//Splice product link
 	function transfer(product, ttsid) {
 		//Change referer
@@ -30,28 +21,33 @@ __tk__define(function (require, exports, module) {
 		//主站转CPS
 		//TRANSFER_CPS_POST = 'http://www.taotaosou.com/cps/getCPSLink.do?url=',
 			TRANSFER_POST = product.clickUrl,
-			isTmTaobao;
+			throughtCPS;
 		//直接跳淘宝
 		//TRANSFER_POST = url;
 
 		//如果getJsonItems返回的的数据中有sourceid，跳转到chaoji99；没有则跳clickUrl。
+		//如果不是天猫、淘宝、淘淘搜，全国所有地方都跳超级99cps
+		//如果是天猫、淘宝，则除北京杭州外跳超级99，但没有cps
 		if (!utils.isJuzi()) {
-			if (!utils.ipLocalCity().match(/杭州|北京/)) {
-				if (product.ttsid) {
-					/*if (location.host.match(/taobao\.com|tmall\.com/)) {
-						isTmTaobao = true;
-					} else {
-						isTmTaobao = false;
-					}
-					TRANSFER_POST = 'http://www.chaoji99.com/' + product.ttsid + '.html' + (isTmTaobao === true ? '?syt=ttk' : '');*/
-					TRANSFER_POST = 'http://www.chaoji99.com/' + product.ttsid + '.html?syt=ttk';
+			if (product.ttsid) {
+				if (!location.host.match(/tmall\.com|taobao\.com|taotaosou\.com/)) {
+					TRANSFER_POST = 'http://www.chaoji99.com/' + product.ttsid + '.html';
+					//TRANSFER_POST = 'http://www.chaoji99.com/' + product.ttsid + '.html?syt=ttk';
 					return TRANSFER_POST;
+				} else if (location.host.match(/tmall\.com|taobao\.com/)) {
+					if (!opLocal && TRANSFER_POST.match(/taobao|tmall/)) { //淘宝天猫商品 的跳转 添加syt!
+						TRANSFER_POST = 'http://www.chaoji99.com/' + product.ttsid + '.html?syt=ttk';
+						return TRANSFER_POST;
+					} else if (!TRANSFER_POST.match(/taobao|tmall/)){ //商品不是淘宝天猫的 都跳chaoji99
+						TRANSFER_POST = 'http://www.chaoji99.com/' + product.ttsid + '.html';
+						return TRANSFER_POST;
+					}
 				}
 			}
 		}
 
-		if (ttsid && ttsid !== 0) {
-			TRANSFER_POST = 'http://item.taotaosou.com/' + ttsid +
+		if (product.ttsid && product.ttsid !== 0) {
+			TRANSFER_POST = 'http://item.taotaosou.com/' + product.ttsid +
 				'.html?utm_medium=ttk&utm_source=' + utils.site();
 		}
 		return TRANSFER_POST;
@@ -86,6 +82,10 @@ __tk__define(function (require, exports, module) {
 	};
 	module.exports = {
 		fetch: function () {
+
+			//设置是否地区差异
+			opLocal = utils.ipLocalCity().match(/杭州|北京/);
+
 			//### 获取同款数据 ###
 			getJSONP({
 				url: api.taobao(),
@@ -489,7 +489,7 @@ __tk__define(function (require, exports, module) {
 								if (mediav[0][0]) {
 									$.each(mediav, function (i, item) {
 										item[1].clickUrl = item[1].curl1;
-										item[1].picUrl = item[1].pimg;
+										item[1].picUrl = item[1].timg;
 										item[1].title = item[1].pn;
 										item[1].ttsid = 0;
 										item[1].promoPrice = item[1].price;
@@ -501,7 +501,7 @@ __tk__define(function (require, exports, module) {
 									//格式化 juxiao数据
 									$.each(mediav, function (i, item) {
 										item.clickUrl = item.curl1;
-										item.picUrl = item.pimg;
+										item.picUrl = item.timg;
 										item.title = item.pn;
 										item.ttsid = 0;
 										item.promoPrice = item.price;
@@ -541,7 +541,7 @@ __tk__define(function (require, exports, module) {
 							if (mediav[0][0]) {
 								$.each(mediav, function (i, item) {
 									item[1].clickUrl = item[1].curl1;
-									item[1].picUrl = item[1].pimg;
+									item[1].picUrl = item[1].timg;
 									item[1].title = item[1].pn;
 									item[1].ttsid = 0;
 									item[1].promoPrice = item[1].price;
@@ -553,7 +553,7 @@ __tk__define(function (require, exports, module) {
 								//格式化 juxiao数据
 								$.each(mediav, function (i, item) {
 									item.clickUrl = item.curl1;
-									item.picUrl = item.pimg;
+									item.picUrl = item.timg;
 									item.title = item.pn;
 									item.ttsid = 0;
 									item.promoPrice = item.price;
@@ -586,8 +586,8 @@ __tk__define(function (require, exports, module) {
 						if (mediav[0]) {
 
 							$.each(mediav, function (i, item) {
-								//item.clickUrl = 'http://search.taotaosou.com/transfer.htm?' + item.href;
-								item.clickUrl = item.href;
+								item.clickUrl = 'http://search.taotaosou.com/transfer.htm?' + item.href;
+								//item.clickUrl = item.href;
 								item.picUrl = item.media;
 								item.title = item.title;
 								item.ttsid = 0;

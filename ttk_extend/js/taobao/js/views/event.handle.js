@@ -5,7 +5,7 @@ __tk__define(function (require, exports, module) {
         utils = require('../utils'),
         Product = require('../product'),
 
-        prefix = {         app: 'TK-',         btn: 'TK-button',         logo: 'TK-logo-icon',         $id: function(selector) {             return $('#' + 'TK-' + selector);         },         $cls: function(selector) {             return $('.' + 'TK-' + selector);         }     },
+        prefix = require('./prefix'),
 
     //url 加上 `&debug=true`，即可开启 debug 模式，将在控制台输出错误信息
         DEBUG = location.href.match(/&debug=true/),

@@ -12,7 +12,7 @@ __tk__define(function (require, exports) {
     model: require('../models/models'),
     host: require('../host'),
     utils: require('../utils'),
-    prefix: {         app: 'TK-',         btn: 'TK-button',         logo: 'TK-logo-icon',         $id: function(selector) {             return $('#' + 'TK-' + selector);         },         $cls: function(selector) {             return $('.' + 'TK-' + selector);         }     }.app,
+    prefix: require('./prefix').app,
     list: require('./b2c.list.render').init,
     body: $('body')
   });
