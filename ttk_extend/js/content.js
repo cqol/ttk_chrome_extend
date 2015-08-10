@@ -1,4 +1,4 @@
-﻿﻿(function () {
+﻿(function () {
 	chrome.storage.local.get(null, function (value) {
 		if (document.getElementById('J---TK-load') == null) {
 			var body = document.getElementsByTagName('body')[0];
