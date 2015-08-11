@@ -21,6 +21,7 @@
             <match>http://*.paipai.com/*</match>
             <match>http://*.meituan.com/*</match>
             <match>http://*.amazon.cn/*</match>
+            <match>http://*.vancl.com/*</match>
             <match>http://*.vip.com/*</match>
             <match>http://*.vjia.com/*</match>
             <match>http://*.dangdang.com/*</match>
