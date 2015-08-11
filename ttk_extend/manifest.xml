@@ -16,9 +16,15 @@
             <match>http://*.jd.com/*</match>
             <match>http://*.suning.com/*</match>
             <match>http://*.gome.com.cn/*</match>
+            <match>http://*.jiuxian.com/*</match>
+            <match>http://*.zhe800.com/*</match>
+            <match>http://*.paipai.com/*</match>
+            <match>http://*.meituan.com/*</match>
             <match>http://*.amazon.cn/*</match>
             <match>http://*.vip.com/*</match>
+            <match>http://*.vjia.com/*</match>
             <match>http://*.dangdang.com/*</match>
+            <match>http://*.yhd.com/*</match>
             <match>http://*.paipai.com/*</match>
             <match>http://weibo.com/*</match>
             <match>http://*.meilishuo.com/*</match>
