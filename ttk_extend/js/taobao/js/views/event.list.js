@@ -128,6 +128,10 @@ __tk__define(function (require, exports) {
 			if ($img.hasClass('s-access-image') || $img.hasClass('productImage')) {
 				return true;
 			}
+		} else if (J.host.isVanclList) {
+			if ($img.hasClass('productPhoto')) {
+				return true;
+			}
 		}
 
 		else {

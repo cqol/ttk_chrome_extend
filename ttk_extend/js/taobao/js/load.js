@@ -43,6 +43,7 @@ __tk__define(function (require, exports) {
 		'www.vip.com',
 		'category.vip.com',
 		'www.gome.com.cn',
+		'search.gome.com.cn',
 		'item.gome.com.cn',
 		'www.amazon.cn',
 		'order.meilishuo.com',
@@ -78,6 +79,7 @@ __tk__define(function (require, exports) {
 		'item.yhd.com',
 		'www.1mall.com',
 		'item.vancl.com',
+		's.vancl.com',
 		'list.vjia.com',
 		's.vjia.com',
 		'item.vjia.com',
@@ -92,7 +94,6 @@ __tk__define(function (require, exports) {
 		'www.dangdang.com',
 		'www.zhe800.com',
 		'www.paipai.com'
-
 	];
 	for (var i = 0; i < domain.length; i++) {
 		if (host === domain[i] || (host.match(/shop/) || href.match(/view_shop.htm/) ||

@@ -51,7 +51,7 @@ __tk__define(function (require, exports, module) {
 		isAMXList: host === 'www.amazon.cn' && (location.href.match(/http:\/\/www.amazon.cn\/s\/ref=.*?/) ||
 		location.href.match(/http:\/\/www.amazon.cn\/b\?.*?/) ||
 		location.href.match(/http:\/\/www.amazon.cn\/b\/ref=.*?/)),
-		isGMList: host === 'www.gome.com.cn' && (location.href.match(/category/) || location.href.match(/search/)),
+		isGMList: host === 'search.gome.com.cn',
 		//淘宝购物车
 		isTBCart: location.href.match(/cart.taobao.com\/cart.htm/),
 
@@ -146,6 +146,8 @@ __tk__define(function (require, exports, module) {
 
 		isVanclDetail: host === 'item.vancl.com',
 
+		isVanclList: host === 's.vancl.com',
+
 		//当当网
 		isHomeDD: location.href === 'http://www.dangdang.com/',
 
@@ -160,6 +162,9 @@ __tk__define(function (require, exports, module) {
 		isSuningList: host === 'search.suning.com' || host === 'list.suning.com',
 
 		isSuningDetail: host === 'product.suning.com',
+
+		//国美
+		isHomeGM: host === 'www.gome.com.cn',
 
 		//weibo
 		isWeibo: host === 'weibo.com',

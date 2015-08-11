@@ -25,6 +25,15 @@ __tk__define(function (require, exports, module) {
 		//直接跳淘宝
 		//TRANSFER_POST = url;
 
+
+		//京东商品走 主站！！ cps收入
+		/*if (TRANSFER_POST.match(/jd.com/)) {
+			TRANSFER_POST = 'http://item.taotaosou.com/' + product.ttsid +
+				'.html?utm_medium=ttk&utm_source=' + utils.site() +
+				'_rec';
+			return TRANSFER_POST;
+		}*/
+
 		//如果getJsonItems返回的的数据中有sourceid，跳转到chaoji99；没有则跳clickUrl。
 		//如果不是天猫、淘宝、淘淘搜，全国所有地方都跳超级99cps
 		//如果是天猫、淘宝，则除北京杭州外跳超级99，但没有cps

@@ -158,22 +158,16 @@ __tk__define(function (require, exports, module) {
 			if (utils.isJuzi()) {
 				require('./juzi/taobao').init();
 				require('./juxiao').init();
-				if (host.isTBDetail || host.isTMDetail || host.isB2CDetail ||
-					host.isVipDetail || host.isMGJDetail || host.isMLSDetail) {
-					if (config.taobao.model.lds) {
-						lds();
-					}
+				if (config.taobao.model.lds) {
+					lds();
 				}
 			} else {
 				bijia_taobao.detail();
 
 				//juxiao中间广告
 				require('./juxiao').init();
-				if (host.isTBDetail || host.isTMDetail || host.isB2CDetail ||
-					host.isVipDetail || host.isMGJDetail || host.isMLSDetail) {
-					if (config.taobao.model.lds) {
-						lds();
-					}
+				if (config.taobao.model.lds) {
+					lds();
 				}
 			}
 
@@ -186,6 +180,7 @@ __tk__define(function (require, exports, module) {
 		if (utils.isJuzi()) {
 			return;
 		}
+
 		setTimeout(function () {
 			var bijia_taobao = require('./bijia/main');
 
@@ -254,6 +249,7 @@ __tk__define(function (require, exports, module) {
 		}
 
 		if (config.taobao.def) {
+			utils.loadCSS('//exts.taotaosou.com/browser-static/taobao/css/bijia/taobao.css');
 
 			//购物车
 			if (host.isTBCart || host.isTMCart || host.isJDCart ||
@@ -263,15 +259,17 @@ __tk__define(function (require, exports, module) {
 			//list页
 			if (config.taobao.model.list) {
 
-				if (host.isTBList || host.isTMList || host.isB2CList ||
-					host.isHomeTaobao || host.isHomeTmall || host.isHomeJD ||
-					host.isMGJList || host.isMLSList || host.isVipList ||
-					host.isHomeMGJ || host.isHomeMLS || host.isHomeVIP || host.isHomeSuning || host.isYHDHome || host.isHomeJiuxian ||
-					host.isHomeJiuxian || host.isHomeDD || host.isHomeAMX || host.isHomeZhe800 || host.isHomeMGJ || host.isHomeNuomi || host.isHomePaipai || host.isHomeMeituan||host.isHomeJumei) {
+				if (host.isTBList || host.isTMList || host.isB2CList || host.isVanclList ||
+					host.isHomeTaobao || host.isHomeTmall || host.isHomeJD || host.isYHDList ||
+					host.isMGJList || host.isMLSList || host.isVipList || host.isSuningList ||
+					host.isHomeMGJ || host.isHomeMLS || host.isHomeVIP || host.isHomeSuning ||
+					host.isYHDHome || host.isHomeJiuxian || host.isHomeGM || host.isGMList ||
+					host.isHomeJiuxian || host.isHomeDD || host.isHomeAMX || host.isHomeZhe800 ||
+					host.isHomeMGJ || host.isHomeNuomi || host.isHomePaipai || host.isHomeMeituan||host.isHomeJumei) {
 					taobao_list();
 				}
 
-				if (host.isTBList || host.isTMList || host.isTMShop || host.isTBShop || host.isTBFav) {
+				if (host.isTBList || host.isTMList || host.isTMShop || host.isTBShop || host.isTBFav || host.isVanclList) {
 					list();
 				} else if (host.isB2CList || host.isYHDList || host.isVjiaList || host.isDDList || host.isSuningList) {
 					//b2c.list();

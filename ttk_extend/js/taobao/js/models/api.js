@@ -63,6 +63,7 @@
 				'&pic=' + encodeURIComponent(Product.item.getImg()) +
 				'&salenum=' + Product.item.getSum() +
 				'&website=' + host.webSite +
+				'&ZZCJ=1' +
 				'&ptyp=' + MLSlistPtype +
 				'&z1_guid=' + utils.GUID;
 

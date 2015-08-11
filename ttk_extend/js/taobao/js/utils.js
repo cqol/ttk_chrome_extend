@@ -80,7 +80,7 @@ __tk__define(function (require, exports, module) {
 		data.z1_guid = GUID;
 		data.ditch = DITCH_ID;
 		data.v = VERSION;
-		utils.postImg({
+		utils.load({
 			url: url,
 			data: data
 		});
@@ -277,7 +277,7 @@ __tk__define(function (require, exports, module) {
 				value = this.site() + '_' + item;
 			}
 
-			new Stat_img(API_LOG + 'browser_statistics.do', {type: value});
+			new Stat(API_LOG + 'browser_statistics.do', {type: value});
 		},
 
 		//### 埋点统计 ###
@@ -287,13 +287,13 @@ __tk__define(function (require, exports, module) {
 		statLog: function (data) {
 			var DCLOG_API_POST = '//dclog.taotaosou.com/statistics.do';
 
-			new Stat_img(DCLOG_API_POST, data);
+			new Stat(DCLOG_API_POST, data);
 		},
 
 		statLog_one: function (data) {
 			var DCLOG_API_POST = '//dclog.taotaosou.com/statistics.do';
 
-			new Stat_img(DCLOG_API_POST, data);
+			new Stat(DCLOG_API_POST, data);
 		},
 
 		statLog_img: function (data) {
@@ -853,7 +853,7 @@ __tk__define(function (require, exports, module) {
 				container = $('#summary-price');
 			}
 			else if (host.isYHDDetail) {
-				container = $('#currentPriceArea');
+				container = $('.mod_detailInfo_priceSales');
 			} else if (host.isVjiaDetial) {
 				container = $('#MarketPrice').parent();
 			} else if (host.isDDDetail) {
@@ -869,7 +869,11 @@ __tk__define(function (require, exports, module) {
 					container = $('#netPriceBox');
 				}
 			} else if (host.isVanclDetail) {
-				container = $('.MSpriceArea');
+				if (document.getElementById('pricearea')) {
+					container = $('#pricearea');
+				} else {
+					container = $('.MSpriceArea');
+				}
 			} else if (host.isAMXDetail) {
 				if (document.getElementById('price_feature_div')) {
 					container = $('#price_feature_div');
@@ -884,7 +888,15 @@ __tk__define(function (require, exports, module) {
 			} else if (host.isMGJDetail) {
 				container = $('.goods-price');
 			} else if (host.isVipDetail) {
-				container = $('.pi_price_box');
+				if ($('.pi-price-box')[0]) {
+					container = $('.pi-price-box');
+				} else {
+					container = $('.pi_price_box');
+				}
+			} else if(host.isGMDetail) {
+				if ($('.prdprice')[0]) {
+					container = $('.prdprice');
+				}
 			}
 			return container;
 		},

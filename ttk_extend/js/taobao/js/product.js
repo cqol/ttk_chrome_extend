@@ -44,7 +44,7 @@ __tk__define(function (require) {
 			J.host.isVjiaDetial || J.host.isVjiaList || J.host.isDDList || J.host.isDDDetail || J.host.isGMDetail || J.host.isAMXList ||
 			J.host.isSuningDetail || J.host.isSuningList || J.host.isVanclDetail || J.host.isVipDetail || J.host.isVipList) {
 			this.box = $(target);
-		} else if ($(target).closest('.pic')) {
+		} else if ($(target).closest('.pic') || J.host.isVanclList) {
 			this.box = $(target);
 		} else if (S_TAOBAO_COM) {
 			this.box = $(target).parents('.item');
@@ -120,7 +120,7 @@ __tk__define(function (require) {
 				if (anchorHref.match(/product\/(.+)-/)) {
 					_id = anchorHref.match(/product\/(.+)-/)[1];
 				} else {
-					_id = anchorHref.match(/product\/(.+)\./)[1];
+					_id = anchorHref.match(/item.gome.com.cn\/(.+)-/)[1];
 				}
 			}
 			else if (J.host.isAMXDetail) {
@@ -154,6 +154,9 @@ __tk__define(function (require) {
 			}
 			else if (J.host.isVanclDetail) {
 				_id = href.match(/[0-9].*\./)[0].slice(0, -1);
+			}
+			else if (J.host.isVanclList) {
+				_id = anchorHref.match(/[0-9].*\./)[0].slice(0, -1);
 			}
 			//s.taobao.com
 			else if (this.box.attr('nid')) {
@@ -352,6 +355,7 @@ __tk__define(function (require) {
 					title = img.title;
 				}
 			}
+
 			//母婴类目 list：窄屏，商品图大小 220 * 220
 			else if (img.title !== '') {
 				title = img.title;
@@ -619,9 +623,12 @@ __tk__define(function (require) {
 			} else if (this.box.find('.productPrice em').attr('title')) {
 				price = this.box.find('.productPrice em').attr('title');
 			} else if (J.host.isTBList) {
-				price =this.box.closest('.product-item').find('.price-num').text();
 				if (this.box.closest('.grid-item')[0]) {
-					price =this.box.closest('.grid-item').find('.price-num').text() + '00';
+					price = this.box.closest('.grid-item').find('.price-num').text() + '00';
+				} else if (this.box.closest('.item').find('.price')[0]) {
+					price = this.box.closest('.item').find('.price').text();
+				} else {
+					price = this.box.closest('.product-item').find('.price-num').text();
 				}
 			}
 			//list 右侧 p4p 商品
@@ -732,6 +739,14 @@ __tk__define(function (require) {
 				if (this.box.closest('.item')[0]) {
 					price = this.box.closest('.item').find('.price strong').text();
 				}
+			} else if (J.host.isGMList) {
+				if (this.box.closest('.prdli')[0]) {
+					price = this.box.closest('.prdli').find('.price').text();
+				}
+			} else if (J.host.isVanclList) {
+				if (this.box.closest('.productwrapper')[0]) {
+					price = this.box.closest('.productwrapper').find('.Sprice').text();
+				}
 			}
 			if (J.host.isVanclDetail) {
 				if ($('.cuxiaoPrice')[0]) {
@@ -741,6 +756,8 @@ __tk__define(function (require) {
 			if (J.host.isVipDetail) {
 				if ($('.pbox_price')[0]) {
 					price = $('.pbox_price em').text() + '00';
+				} else {
+					price = $('.pbox-price em').text() + '00';
 				}
 			} else if (J.host.isVipList) {
 				if (this.box.parents('.cat-list-item')[0]) {
