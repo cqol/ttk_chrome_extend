@@ -15,44 +15,9 @@ taotaosou.extension.config.getGuid = function () {
 	}).toUpperCase();
 };
 
-//这个函数可以检测到客户端发来的消息
-function clientmsg(msg){
-	var data = JSON.parse(msg);
-	//自动登录接口：http://www.taotaosou.com/uc/clientAutoLogin?callback=?&uid=xxx&sig=xxx
-	// msg = {uid:'123',sig:'xxx'}
-	$.ajax({
-		url: "http://uc.taotaosou.com/clientAutoLogin?uid=" + data.uid + "&sig=" + data.sig,
-		dataType: "json",
-		success: function (data) {
-			var tkData = {
-				status: 1,
-				id: data.user.id,
-				nick: data.user.nick
-			}
-			chrome.browserAction.setPopup({popup: "html/popup.html", width: 420, height: 598 });
-			chrome.browserAction.setIcon({path: "img/icon.png"});
-			localStorage.setItem('TK-user-data', JSON.stringify(tkData));
-		}
-	});
-
-}
-
-//这个函数给客户端发消息(搜狗中由于无法监听cookie所以这个函数没用)
-function sentClientData(data){
-	try{
-		var plugin = document.getElementById("taotaosouplugin");
-		if ( plugin) {
-			plugin.sendDatatoClient(data);
-		}
-	}
-	catch(err){
-		console.log(err);
-	}
-}
-
 // init the config data
 taotaosou.extension.config.init = function () {
-	taotaosou.extension.config.data.version = "1.5.2";
+	taotaosou.extension.config.data.version = "2.1.3";
 	taotaosou.extension.config.data.qdid = "0011000420131018";
 	taotaosou.extension.config.data.source = "Sogou";
 	taotaosou.extension.config.data.guid = taotaosou.extension.config.getGuid();
@@ -137,29 +102,6 @@ taotaosou.extension.config.getClientUseId = function () {
 
 }
 
-taotaosou.extension.requesthandler = function( request, sender, sendResponse ){
-	if(request.command == "refreshPage" && sender.tab.id == nTabId) {
-		chrome.tabs.executeScript( nTabId, {file: "js/login/login.js"} );
-		nTabId = 0;
-	};
-	if (request.command == "cmdInject") {
-		var sent = JSON.parse(localStorage.tts_config_data);
-		sent.isNeedMessage = taotaosou.extension.config.isNeedMsg();
-		sendResponse(sent);
-	}
-	if (request.command == "cmdUpdateState") {
-		if (request.status === 0) {
-			chrome.browserAction.setPopup({popup: ""});
-			chrome.browserAction.setIcon({path: "img/icon.png"});
-		} else if (request.status === 1) {
-			chrome.browserAction.setPopup({popup: "html/popup.html", width: 420, height: 598 });
-			chrome.browserAction.setIcon({path: "img/icon.png"});
-		}
-		sendResponse(request);
-		localStorage.setItem('TK-user-data', JSON.stringify(request));
-	}
-};
-
 taotaosou.extension.getOSFromUseragent = function(){
 	var retOS = "Unknow";
 	try {
@@ -212,7 +154,6 @@ taotaosou.extension.getOSFromUseragent = function(){
 		localStorage.tts_chrome_isActive = true;
 	}
 
-	chrome.extension.onRequest.addListener(taotaosou.extension.requesthandler);
 	$.isEmptyObject = function (obj)
 	{
 		for (var name in obj)

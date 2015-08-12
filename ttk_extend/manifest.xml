@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension>
     <id>com.taotaosou.taotongkuan</id>
-    <name>淘同款购物助手</name>
+    <name>淘淘搜比价(淘同款)</name>
     <author>淘淘搜</author>
     <show_icon>true</show_icon>
-    <description>淘同款是畅行淘宝和天猫的强大利器。它通过图像搜索技术为你迅速找出同款或相似款的商品，方便你进行比价和挑选，将省钱进行到底！</description>
+    <description>淘淘搜比价(淘同款)是畅行淘宝和天猫的强大利器。它通过图像搜索技术为你迅速找出同款或相似款的商品，方便你进行比价和挑选，将省钱进行到底！</description>
     <background page="html/background.html"/>
 
     <content_scripts>
