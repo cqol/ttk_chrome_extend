@@ -75,7 +75,7 @@ module.exports = function (grunt) {
 			ttk: {
 				files: [
 
-					{expand: true, cwd: 'ttk_extend/', src: '**/*', dest: 'dist/ttk_sogo_extend/'}
+					{expand: true, cwd: 'ttk_extend/', src: ['**/*', '!manifest.json'], dest: 'dist/ttk_sogo_extend/'}
 				]
 			}
 		},
