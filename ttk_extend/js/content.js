@@ -483,7 +483,7 @@
 	}
 
 	(function () {
-		sogouExplorer.extension.sendRequest({"command": "cmdInject"}, function(res){
+		chrome.extension.sendRequest({"command": "cmdInject"}, function(res){
 			if (document.getElementById('J---TK-load') == null) {
 				try {
 					var value = res;

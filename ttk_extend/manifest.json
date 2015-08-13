@@ -21,9 +21,7 @@
     "page": "html/background.html"
   },
   "description": "淘淘搜比价(淘同款)是畅行淘宝和天猫的强大利器。它通过图像搜索技术为你迅速找出同款或相似款的商品，方便你进行比价和挑选，将省钱进行到底！",
-  "icons": {
-    "128": "img/icon-128.png"
-  },
+
   "name": "淘淘搜比价(淘同款)",
   "permissions": [ "tabs", "http://*/*", "https://*/*", "cookies", "unlimitedStorage", "storage" ],
   "version": "2.0.0",

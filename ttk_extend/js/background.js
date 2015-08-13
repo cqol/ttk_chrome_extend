@@ -102,6 +102,29 @@ taotaosou.extension.config.getClientUseId = function () {
 
 }
 
+taotaosou.extension.requesthandler = function( request, sender, sendResponse ){
+	if(request.command == "refreshPage" && sender.tab.id == nTabId) {
+		chrome.tabs.executeScript( nTabId, {file: "js/login/login.js"} );
+		nTabId = 0;
+	};
+	if (request.command == "cmdInject") {
+		var sent = JSON.parse(localStorage.tts_config_data);
+		sent.isNeedMessage = taotaosou.extension.config.isNeedMsg();
+		sendResponse(sent);
+	}
+	if (request.command == "cmdUpdateState") {
+		if (request.status === 0) {
+			chrome.browserAction.setPopup({popup: ""});
+			chrome.browserAction.setIcon({path: "img/icon.png"});
+		} else if (request.status === 1) {
+			chrome.browserAction.setPopup({popup: "html/popup.html", width: 420, height: 598 });
+			chrome.browserAction.setIcon({path: "img/icon.png"});
+		}
+		sendResponse(request);
+		localStorage.setItem('TK-user-data', JSON.stringify(request));
+	}
+};
+
 taotaosou.extension.getOSFromUseragent = function(){
 	var retOS = "Unknow";
 	try {
@@ -154,6 +177,7 @@ taotaosou.extension.getOSFromUseragent = function(){
 		localStorage.tts_chrome_isActive = true;
 	}
 
+	chrome.extension.onRequest.addListener(taotaosou.extension.requesthandler);
 	$.isEmptyObject = function (obj)
 	{
 		for (var name in obj)
