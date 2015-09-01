@@ -334,7 +334,7 @@
 		 * 广告系统V1.0-淘同款QQ空间工具条；
 		 * 需求地址：http://199.155.122.129:8080/pages/viewpage.action?pageId=16124453
 		 */
-		function qzone() {
+		/*function qzone() {
 			var rhost = 'user.qzone.qq.com';
 
 			if (host === rhost) {
@@ -343,7 +343,7 @@
 					load(qzoneSrc);
 				}
 			}
-		}
+		}*/
 
 		/**
 		 * 大图媒体站
@@ -442,7 +442,6 @@
 							paopao: true,
 							insert: true, //插入
 							href: true,
-							qzone: true,
 							cps: true
 						}
 					}
@@ -460,10 +459,10 @@
 
 				var arrHref = ['taobao', 'tmall', 'jd', 'vip', 'mogujie', 'meilishuo'];
 				if (config.tmt.def) {
-					if (config.tmt.model.qzone) {
+					/*if (config.tmt.model.qzone) {
 						qzone();
 					}
-
+					*/
 					//淘内
 					if (config.tmt.model.shopSite) {
 						for (var i = 0; i < arrHref.length; i++) {
