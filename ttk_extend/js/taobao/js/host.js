@@ -51,7 +51,7 @@ __tk__define(function (require, exports, module) {
 		isAMXList: host === 'www.amazon.cn' && (location.href.match(/http:\/\/www.amazon.cn\/s\/ref=.*?/) ||
 		location.href.match(/http:\/\/www.amazon.cn\/b\?.*?/) ||
 		location.href.match(/http:\/\/www.amazon.cn\/b\/ref=.*?/)),
-		isGMList: host === 'search.gome.com.cn',
+		isGMList: host === 'search.gome.com.cn' || host === 'list.gome.com.cn',
 		//淘宝购物车
 		isTBCart: location.href.match(/cart.taobao.com\/cart.htm/),
 
@@ -103,7 +103,7 @@ __tk__define(function (require, exports, module) {
 
 		isMGJDetail: mgjDetail(),
 
-		isMLSList: host.match(/meilishuo/) && pathname.match(/guang|pretty|search|group|ihome|person/),
+		isMLSList: host.match(/meilishuo/) && pathname.match(/guang|pretty|search|group|ihome|person|beauty/),
 
 		isMLSDetail: host.match(/meilishuo/) && location.href.match(/share/),
 
@@ -139,6 +139,7 @@ __tk__define(function (require, exports, module) {
 
 		isYHDHome: location.href === 'http://www.yhd.com/',
 
+		isJumeiDetail: host === 'item.jumei.com',
 		//凡客V+
 		isVjiaList: host === 'list.vjia.com' || host === 's.vjia.com',
 
@@ -170,19 +171,28 @@ __tk__define(function (require, exports, module) {
 		isWeibo: host === 'weibo.com',
 
 		//酒仙
-		isHomeJiuxian: location.href === 'http://www.jiuxian.com/',
+		isHomeJiuxian: host === 'www.jiuxian.com',
 
 		//聚美优品
-		isHomeJumei: /^http:\/\/.*\.jumei\.com\/$/.test(location.href),
+		isHomeJumei: /^http:\/\/.*\.jumei\.com\/$/.test(location.href) || host === 'search.jumei.com',
 
 		//折800
-		isHomeZhe800: location.href === 'http://www.zhe800.com/',
+		isHomeZhe800: host === 'www.zhe800.com',
 
+		isZhe800List: host === 'search.zhe800.com' || host === 'brand.zhe800.com' || host === 'www.yixun.com',
+
+		isYixunList: host === 'searchex.yixun.com',
+
+		isYixunDetail: host === 'item.yixun.com',
 		//糯米
 		isHomeNuomi: /^http:\/\/.*\.nuomi.com\/$/.test(location.href),
 
 		//拍拍
-		isHomePaipai: location.href === 'http://www.paipai.com/',
+		isHomePaipai: host === 'www.paipai.com',
+
+		isPaipaiList: host === 's.paipai.com',
+
+		isPaipaiDetail: host === 'auction1.paipai.com',
 
 		//美团
 		isHomeMeituan: /^http:\/\/.*\.meituan.com\/$/.test(location.href)
@@ -204,7 +214,7 @@ __tk__define(function (require, exports, module) {
 	} else if (module.exports.isTMCart) {
 		pageType = 22;
 		webSite = 'tmall';
-	} else if (module.exports.isTBDetail) {
+	} else if (module.exports.isTBDetail || module.exports.isJuDetail) {
 		pageType = 3;
 		webSite = 'taobao';
 	} else if (module.exports.isTMDetail || module.exports.isHomeTmall) {
@@ -279,6 +289,11 @@ __tk__define(function (require, exports, module) {
 	} else if (module.exports.isVanclDetail) {
 		pageType = 'B82';
 		webSite = 'vancl';
+	} else if (module.exports.isYixunDetail) {
+		webSite = 'yixun';
+	} else if (module.exports.isPaipaiDetail || module.exports.isPaipaiList) {
+		pageType = 'B82';
+		webSite = 'paipai';
 	}
 	else {
 		pageType = '999';

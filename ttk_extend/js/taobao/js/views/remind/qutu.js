@@ -1,9 +1,9 @@
 __tk__define(function (require, exports, module) {
 	var $ = require('../../lib/jquery'),
+		_ = require('../../lib/underscore'),
 		host = require('../../host'),
 		utils = require('../../utils'),
 		product = require('../../product'),
-		templates = require('../../templates'),
 		tts_stat = require("../../utils/tts_stat"),
 		body = $('body');
 
@@ -11,6 +11,8 @@ __tk__define(function (require, exports, module) {
 	//商品当前价格；
 	if (product.item.getPrice() !== '') {
 		price = parseInt(product.item.getPrice(), 10);
+	} else {
+		return;
 	}
 
 	function format(num) {
@@ -59,7 +61,7 @@ __tk__define(function (require, exports, module) {
 		var defalut = {
 			beginXY: 5, //圆心点起始位置
 			ySetpPx: 35, //y轴间距
-			xSetpPx: 54 //x轴间距
+			xSetpPx: 36.2 //x轴间距
 		};
 		this.color = '#ff3b30';
 
@@ -93,6 +95,9 @@ __tk__define(function (require, exports, module) {
 		this.avg = this.getAvg(this.price);
 
 		this.lengthSecPrice = this.price[this.price.length - 1];
+		if (this.price[this.price.length - 2]) {
+			this.lengthThridPrice = this.price[this.price.length - 2];
+		}
 
 		this.date = parseData.date;
 		if (this.nPrice !== '') {
@@ -146,11 +151,13 @@ __tk__define(function (require, exports, module) {
 		getBtnClass: function (obj, tag) {
 			var classTag = 'TK-icon-sub-null';
 			var iconText = $('.J-TK-mind-sub-icon-text');
+			//差价幅度
+			//var setpMatch = true;
 			if (tag) {
 				classTag = 'TK-icon-sub-null';
 				iconText.text('价格曲线');
 			} else {
-				if (this.nPrice > this.avg) {
+				/*if (this.nPrice > this.avg) {
 					classTag = 'TK-icon-sub-up';
 					iconText.text('涨价啦!');
 				} else if (this.nPrice < this.avg) {
@@ -169,6 +176,43 @@ __tk__define(function (require, exports, module) {
 						classTag = 'TK-icon-sub-end';
 						iconText.text('价格很平稳');
 					}
+				}*/
+				/*console.log(this.min)
+				console.log(this.lengthThridPrice)
+				console.log(this.nPrice)*/
+
+				//如果 是几分的 情况！
+				if (Math.abs(this.lengthSecPrice - this.nPrice) < 10) {
+					//取倒数第三个点 不行就写个递归！
+					this.lengthSecPrice = this.lengthThridPrice;
+				}
+
+				if (this.lengthSecPrice > this.nPrice) {
+					this.color = '#63d089';
+					classTag = 'TK-icon-sub-down';
+					iconText.text('降价啦!');
+				} else if (this.lengthSecPrice < this.nPrice) {
+					classTag = 'TK-icon-sub-up';
+					iconText.text('涨价啦!');
+				} else if (this.min === this.nPrice) {
+					if (this.max > this.nPrice) {
+						this.color = '#63d089';
+						classTag = 'TK-icon-sub-down';
+						iconText.text('降价啦!');
+					} else {
+						classTag = 'TK-icon-sub-end';
+						iconText.text('价格很平稳');
+					}
+				} else if (this.min > this.nPrice) {
+					this.color = '#63d089';
+					classTag = 'TK-icon-sub-down';
+					iconText.text('降价啦!');
+				} else if (this.min < this.nPrice) {
+					classTag = 'TK-icon-sub-up';
+					iconText.text('涨价啦!');
+				} else {
+					classTag = 'TK-icon-sub-end';
+					iconText.text('价格很平稳');
 				}
 			}
 			obj.addClass(classTag);
@@ -376,24 +420,9 @@ __tk__define(function (require, exports, module) {
 		},
 		nextUniq: function (arr) {
 			var oArr = arr;
-			var nArr = [];
-			var preItem,
-				nextItem;
-			for (var i = 0, len = oArr.length; i < len; i++) {
-				preItem = oArr[i];
-				nextItem = oArr[i + 1];
-				//console.log(nextItem);
-				if (typeof nextItem !== 'undefined') {
-					//if (Math.floor(Math.ceil(new Date(preItem.time).getTime() / 1e3) / 60 / 60 / 24) !== Math.floor(Math.ceil(new Date(nextItem.time).getTime() / 1e3) / 60 / 60 / 24)) {
-					if ((new Date(preItem.time).getMonth() + 1) !== (new Date(nextItem.time).getMonth() + 1) ||
-						new Date(preItem.time).getDate() !== new Date(nextItem.time).getDate()) {
-						nArr.push(oArr[i]);
-					}
-				} else {
-					nArr.push(oArr[i]);
-				}
-			}
-			return nArr;
+			return _.uniq(oArr, function (item) {
+				return item.price;
+			});
 		},
 		/**
 		 * 格式化接口数据
@@ -451,6 +480,11 @@ __tk__define(function (require, exports, module) {
 			}
 			return parseYAxis;
 		},
+
+		/**
+		 * 获取x轴的时间
+		 * @returns {Array} ["6/19", "6/29", "7/9", "7/19", "7/29"]
+		 */
 		getXaerx: function () {
 			//当前时间：1407479196097
 			//60天前；1402295205064
@@ -461,12 +495,19 @@ __tk__define(function (require, exports, module) {
 			//86400000  1天
 			//518400000 6天
 			//345600000 3天
-			var maxDate = new Date().getTime() - (864000000- 86400000),
-				minDate = maxDate - 5184000000,
-				step = 864000000;
-			this.minDay = Math.round(minDate / 86400000);
+			//var maxDate = new Date().getTime() - (864000000 - 86400000),
+			//	minDate = maxDate - 5184000000,
+			//	step = 864000000;
+			//this.minDay = Math.round(minDate / 86400000);
 			//取Y轴日期数组
 			//retrue:["6/19", "6/29", "7/9", "7/19", "7/29"]
+
+
+			var oneDay = 86400000;
+			var maxDate = new Date().getTime() - ((oneDay*15) - oneDay),
+				minDate = maxDate - (oneDay*90),
+				step = oneDay * 15 ;
+			this.minDay = Math.round(minDate / oneDay);
 
 			var xDate = [];
 			var starDate;
@@ -486,15 +527,27 @@ __tk__define(function (require, exports, module) {
 				11: '12'
 			};
 			var xTip;
-			for (var i = 0; i < 6; i++) {
-				minDate = minDate + step;
-				starDate = new Date(minDate);
+			var getNowTimes = new Date().getTime();
+			for (var i = 0; i < 7; i++) {
+				starDate = new Date(getNowTimes);
 				xTip = format(monthObj[starDate.getMonth()]) + '/' + format(starDate.getDate());
 				xDate.push(xTip);
+				getNowTimes = getNowTimes - step;
 			}
+			xDate = xDate.reverse();
 			return xDate;
 
 		},
+
+		/**
+		 * 画虚线
+		 * @param obj
+		 * @param fromX
+		 * @param fromY
+		 * @param toX
+		 * @param toY
+		 * @param pattern
+		 */
 		dashedLineTo: function (obj, fromX, fromY, toX, toY, pattern) {
 			// default interval distance -> 5px
 			if (typeof pattern === "undefined") {
@@ -520,6 +573,10 @@ __tk__define(function (require, exports, module) {
 			obj.stroke();
 		},
 
+		/**
+		 * 格式化后的数据，[｛日期，价格，x轴，y轴｝];
+		 * @returns {Array}
+		 */
 		getObjXY: function () {
 			var y = this.getYdata().Ypx;
 			var x = this.getXdata().Xpx;
@@ -584,7 +641,7 @@ __tk__define(function (require, exports, module) {
 					ctx.beginPath();
 					ctx.moveTo(ySetp, base);
 					ctx.lineTo(ySetp, baseH);
-					ySetp = ySetp + (54 * 2);
+					ySetp = ySetp + (54.3 * 2);
 
 					ctx.stroke();
 				}
@@ -803,22 +860,18 @@ __tk__define(function (require, exports, module) {
 
 	//暴露接口
 	module.exports = {
-		init: function (ttsid) {
-			if (ttsid) {
-				body.on('tk.priceHistory', function (e, data) {
-					/*console.log(data);
-					 data = [
-					 {"price": 9990, "time": "Oct 9, 2014 8:02:29 PM"}
-					 ];
-					 window.price = 9910;*/
-					utils.stat('tool_curvebutton_PV', true);
-					new TkQutu(data, {});
-				});
-				$.getJSON('//browserre.taotaosou.com/priceHistory.do?ttsid=' + ttsid +
-					'&callback=?', function (data) {
-					body.trigger('tk.priceHistory', [data]);
-				});
-			}
+		init: function () {
+			body.on('tk.priceHistory', function (e, data) {
+
+				utils.stat('tool_curvebutton_PV', true);
+				new TkQutu(data, {});
+			});
+			$.getJSON('//browserre.taotaosou.com/priceHistory.do?itemId=' + product.item.getID() +
+				'&website=' + host.webSite +
+				'&price=' + price +
+				'&callback=?', function (data) {
+				body.trigger('tk.priceHistory', [data]);
+			});
 		}
 	};
 });

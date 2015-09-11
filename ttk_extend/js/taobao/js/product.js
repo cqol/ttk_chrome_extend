@@ -65,7 +65,7 @@ __tk__define(function (require) {
 		}
 
 		if (!this.box[0]) {
-			throw new Error('disable');
+			throw new Error('not find imgBox; disable!');
 		}
 	}
 
@@ -91,12 +91,9 @@ __tk__define(function (require) {
 				_id = anchorHref.match(/[0-9]+/)[0];
 			}
 			else if (J.host.isYHDList) {
-				/*if (anchorHref.match(/[0-9]{5,9}\_/)) {
-				 _id = anchorHref.match(/[0-9]{5,9}\_/)[0].slice(0, -1);
-				 }*/
-				if (anchorHref.split(/\//)[2]) {
-					_id = anchorHref.split(/\//)[anchorHref.split(/\//).length - 1];
-
+				//http://item.yhd.com/item/30137067
+				if (anchorHref.match(/item\/[0-9]{5,9}/)) {
+					_id = anchorHref.match(/item\/([0-9]{5,9})/)[1];
 				}
 			}
 			else if (J.host.isVipDetail) {
@@ -140,20 +137,36 @@ __tk__define(function (require) {
 					_id = this.box.parents('.s-result-item').data().asin;
 				}
 			}
+			else if (J.host.isPaipaiDetail) {
+				_id = location.pathname.substring(1);
+			}
+			else if (J.host.isPaipaiList) {
+				if (anchorHref.match(/http:\/\/auction1.paipai.com\/(.+).+/)[1]) {
+					_id = anchorHref.match(/http:\/\/auction1.paipai.com\/(.+).+/)[1];
+				}
+			}
+			else if (J.host.isYixunDetail) {
+				if (location.pathname.match(/item-([0-9].*)\./)[1]) {
+					_id = location.pathname.match(/item-([0-9].*)\./)[1];
+				}
+			}
+			else if (J.host.isYixunList) {
+				if (anchorHref.match(/item-([0-9].*)\./)[1]) {
+					_id = anchorHref.match(/item-([0-9].*)\./)[1];
+				}
+			}
 			else if (J.host.isYHDDetail) {
 				if (location.pathname.split(/\//)[2]) {
 					_id = location.pathname.split(/\//)[2];
 				}
 				//_id = href.match(/[0-9]{5,9}\?/)[0].slice(0, -1);
 			}
-			else if (J.host.isVjiaDetial || J.host.isSuningDetail) {
+			else if (J.host.isVjiaDetial || J.host.isSuningDetail ||
+				J.host.isVanclDetail || J.host.isJumeiDetail) {
 				_id = href.match(/[0-9].*\./)[0].slice(0, -1);
 			}
 			else if (J.host.isDDDetail) {
 				_id = href.match(/[0-9]+/)[0];
-			}
-			else if (J.host.isVanclDetail) {
-				_id = href.match(/[0-9].*\./)[0].slice(0, -1);
 			}
 			else if (J.host.isVanclList) {
 				_id = anchorHref.match(/[0-9].*\./)[0].slice(0, -1);
@@ -178,6 +191,9 @@ __tk__define(function (require) {
 			//detail.taobao.com
 			else if (J.host.isTBDetail) {
 				_id = J.utils.sliceID(href);
+			}
+			else if (J.host.isJuDetail) {
+				_id = J.utils.sliceID(anchorHref);
 			}
 			else if ((anchorHref && host === J.host.tbList) || //list.taobao.com
 				J.host.isTBFav) {
@@ -282,7 +298,7 @@ __tk__define(function (require) {
 			if (J.host.isYHDDetail) {
 				//title = docTitle;
 				title = $('#productMainName').attr('title');
-			//} else if (J.host.isSuningList && $(img).parent().next().hasClass('inforBg')) {
+				//} else if (J.host.isSuningList && $(img).parent().next().hasClass('inforBg')) {
 			} else if (J.host.isSuningList) {
 				if (this.box.closest('.item')[0]) {
 					title = this.box.closest('.item').find('.i-name').text();
@@ -332,6 +348,9 @@ __tk__define(function (require) {
 				} else {
 					title = $('#productDisplayName').text();
 				}
+			}
+			else if (J.host.isPaipaiDetail || J.host.isJuDetail) {
+				title = document.title;
 			}
 			else if (J.host.isB2CDetail) {
 				//title = docTitle.replace('-京东商城', '');
@@ -503,6 +522,16 @@ __tk__define(function (require) {
 			return level;
 		},
 
+		getBrand: function () {
+			var brand = '';
+			if (host.isTMDetail) {
+				if ($('.J_EbrandLogo')[0]) {
+					brand = $('.J_EbrandLogo').text();
+				}
+			}
+			return brand;
+		},
+
 		//### 获取商品图片 ###
 		getImg: function () {
 			var img = '',
@@ -669,23 +698,6 @@ __tk__define(function (require) {
 					price = numberFormat(window.KISSY._TMD_Config.itemDO.reservePrice);
 				}
 
-				/*window.KISSY.use('malldetail/model/product', function (b, pro) {
-				 //促销价
-				 pro.onChange('currentPromotionList', function (data) {
-				 if (data) {
-				 price = numberFormat(data[0].price);
-				 } else {
-				 if ($('#J_StrPriceModBox').hasClass('tm-price-cur')) {
-				 price = $('#J_StrPriceModBox .tm-price').text();
-				 } else if ($('#J_PromoBox')[0]) {
-				 price = $('#J_PromoBox .J_CurPrice').text();
-				 } else {
-				 price = $('#J_PromoPrice .tm-promo-cur .tm-price').text();
-				 }
-				 }
-				 });
-				 });*/
-
 				if ($('#J_StrPriceModBox').hasClass('tm-price-cur')) {
 					price = $('#J_StrPriceModBox .tm-price').text();
 				} else if ($('#J_PromoBox')[0]) {
@@ -702,14 +714,41 @@ __tk__define(function (require) {
 					price = $('#_sku_top_price b').text();
 				}
 
+			} else if (J.host.isPaipaiDetail) {
+				if (document.getElementById('commodityCurrentPrice')) {
+					price = $('#commodityCurrentPrice').text();
+				}
+			} else if (J.host.isYixunDetail) {
+				if ($('.mod_price')[0]) {
+					price = $('.mod_price').eq(0).text();
+				}
+			} else if (J.host.isYixunList) {
+				if (this.box.closest('.mod_goods')[0]) {
+					price = this.box.closest('.mod_goods').find('.mod_price').text();
+				}
+			} else if (J.host.isJumeiDetail) {
+				if ($('.price_num')[0]) {
+					price = $('.price_num').eq(0).text() + '00';
+				}
+			} else if (J.host.isJuDetail) {
+				if ($('.currentPrice')[0]) {
+					price = $('.currentPrice').eq(0).text();
+				}
 			}
 			if (J.host.isMLSDetail) {
-				price = $('.sku_meta .price').text();
+				if (document.getElementById('price-now')) {
+					price = $('#price-now').text();
+				} else {
+					price = $('.sku_meta .price').text();
+				}
 			}
 			if (J.host.isB2CDetail) {
 				if (document.getElementById('jd-price')) {
 					price = $('#jd-price').text();
-				} else {
+				} else if (document.getElementById('price')) {
+					price = $('#price strong').text();
+				}
+				else {
 					price = $('.l_info_a b').eq(0).text();
 				}
 			}
@@ -794,15 +833,31 @@ __tk__define(function (require) {
 					price = $('.priceLarge').text();
 				}
 			} else if (J.host.isB2CList) {
-				price = this.box.parents('.lh-wrap').find('.p-price strong').text();
+				if (this.box.parents('.gl-item')[0]) {
+					price = this.box.parents('.gl-item').find('.p-price strong').text();
+				} else {
+					price = this.box.parents('.lh-wrap').find('.J_price').text();
+				}
 			} else if (J.host.isMGJList) {
 				price = this.box.find('.price_info').text();
 			} else if (J.host.isDDList) {
 
-				if (this.box.parent().parent().hasClass('inner')) {
-					price = this.box.parent().parent().find('.price_n').text();
+				if (this.box.closest('.shop_box')[0]) {
+					price = this.box.closest('.shop_box').find('.price_n').text();
 				} else {
 					price = this.box.parent().parent().find('.d_price').text();
+				}
+			} else if (J.host.isTMList) {
+				if (this.box.closest('.product')[0]) {
+					price = this.box.closest('.product').find('.productPrice').text();
+				}
+			} else if (J.host.isMLSList) {
+				if (this.box.closest('.new_poster')[0]) {
+					price = this.box.closest('.new_poster').find('.price').text();
+				}
+			} else if (J.host.isPaipaiList) {
+				if (this.box.closest('.hproduct')[0]) {
+					price = this.box.closest('.hproduct').find('.price').text();
 				}
 			}
 

@@ -90,6 +90,7 @@ __tk__define(function (require, exports, module) {
 
 	// 淘宝、天猫详情页
 	function taobao_detail() {
+		//图片位置对象
 		var getContainer = function () {
 			var img;
 			if (host.isTBDetail || host.isTMDetail) {
@@ -97,6 +98,8 @@ __tk__define(function (require, exports, module) {
 			} else if (host.isB2CDetail) {
 				if ($('.land_a_pic')[0]) {
 					img = $('.land_a_pic .err-product')[0];
+				} else if (document.getElementById('spec-big')) {
+					img = $('#spec-big img')[0];
 				} else {
 					img = $('#spec-n1 img')[0];
 				}
@@ -138,6 +141,14 @@ __tk__define(function (require, exports, module) {
 				} else {
 					img = $('#imgTagWrapperId img')[0];
 				}
+			} else if (host.isPaipaiDetail) {
+				img = document.getElementById('pfhlkd_smallImage');
+			} else if (host.isYixunDetail) {
+				img = document.getElementById('xgalleryImg');
+			} else if (host.isJumeiDetail) {
+				img = document.getElementById('product_img');
+			} else if (host.isJuDetail) {
+				img = $('.J_zoom')[0];
 			}
 
 			return img;
@@ -153,6 +164,11 @@ __tk__define(function (require, exports, module) {
 				//Detail 默认展现 PV
 				body.trigger('tkstat.global.detailpv');
 			}]);
+
+
+			/*event.extend();
+			 //Initialization
+			 body.trigger('tkextend.global.open', ['unload']);*/
 
 			//juzi浏览器
 			if (utils.isJuzi()) {
@@ -258,9 +274,9 @@ __tk__define(function (require, exports, module) {
 			//list页
 			if (config.taobao.model.list) {
 
-				if (host.isTBList || host.isTMList || host.isB2CList || host.isVanclList ||
-					host.isHomeTaobao || host.isHomeTmall || host.isHomeJD || host.isYHDList ||
-					host.isMGJList || host.isMLSList || host.isVipList || host.isSuningList ||
+				if (host.isTBList || host.isTMList || host.isB2CList || host.isVanclList || host.isPaipaiList ||
+					host.isHomeTaobao || host.isHomeTmall || host.isHomeJD || host.isYHDList || host.isZhe800List ||
+					host.isMGJList || host.isMLSList || host.isVipList || host.isSuningList || host.isYixunList ||
 					host.isHomeMGJ || host.isHomeMLS || host.isHomeVIP || host.isHomeSuning ||
 					host.isYHDHome || host.isHomeJiuxian || host.isHomeGM || host.isGMList ||
 					host.isHomeJiuxian || host.isHomeDD || host.isHomeAMX || host.isHomeZhe800 ||
@@ -270,19 +286,19 @@ __tk__define(function (require, exports, module) {
 
 				if (host.isTBList || host.isTMList || host.isTMShop || host.isTBShop || host.isTBFav || host.isVanclList) {
 					list();
-				} else if (host.isB2CList || host.isYHDList || host.isVjiaList || host.isDDList || host.isSuningList) {
+				} else if (host.isB2CList || host.isYHDList || host.isVjiaList || host.isDDList || host.isSuningList || host.isYixunList) {
 					//b2c.list();
 					list();
-				} else if (host.isMLSList || host.isMGJList || host.isGMList || host.isVipList || host.isAMXList) {
+				} else if (host.isMLSList || host.isMGJList || host.isGMList || host.isVipList || host.isAMXList || host.isPaipaiList) {
 					list();
 				}
 			}
 			//detail页
 			if (config.taobao.model.detail) {
-				if (host.isTBDetail || host.isTMDetail || host.isB2CDetail ||
-					host.isVipDetail || host.isMGJDetail || host.isMLSDetail) {
+				if (host.isTBDetail || host.isTMDetail || host.isB2CDetail || host.isYixunDetail ||
+					host.isVipDetail || host.isMGJDetail || host.isMLSDetail || host.isJuDetail) {
 					taobao_detail();
-				} else if (host.isYHDDetail || host.isGMDetail ||
+				} else if (host.isYHDDetail || host.isGMDetail || host.isPaipaiDetail || host.isJumeiDetail ||
 					host.isVjiaDetial || host.isDDDetail || host.isSuningDetail || host.isVanclDetail || host.isAMXDetail) {
 					taobao_detail();
 				}

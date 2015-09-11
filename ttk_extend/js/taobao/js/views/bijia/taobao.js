@@ -142,7 +142,6 @@ __tk__define(function (require, exports, module) {
       this.$el = $(this.template(data)).appendTo("body");
       this.viewDeferred.resolve();
 
-      if (data.ttsid) {
 				try {
 					document.createElement('canvas').getContext('2d');
 					require("./taobao.remind").init();
@@ -155,13 +154,12 @@ __tk__define(function (require, exports, module) {
 						data.isShowRemind = true;
 						this.remindViewDeferred.resolve(data.ttsid);
 					}
-					if (config.taobao.model.qutu) {
+					/*if (config.taobao.model.qutu) {
 						data.isShowQutu = true;
 						this.qutuViewDeferred.resolve(data.ttsid);
-					}
+					}*/
 				} catch(e) {}
 
-      }
       this.renderSameView(data);
       this.emuResponsive(data);
 

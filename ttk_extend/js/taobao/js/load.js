@@ -43,6 +43,7 @@ __tk__define(function (require, exports) {
 		'www.vip.com',
 		'category.vip.com',
 		'www.gome.com.cn',
+		'list.gome.com.cn',
 		'search.gome.com.cn',
 		'item.gome.com.cn',
 		'www.amazon.cn',
@@ -90,9 +91,19 @@ __tk__define(function (require, exports) {
 		'list.suning.com',
 		'product.suning.com',
 		'www.suning.com',
+		'search.jumei.com',
+		'searchex.yixun.com',
+		'www.yixun.com',
+		'item.yixun.com',
 		'www.jiuxian.com',
+		'item.jumei.com',
 		'www.dangdang.com',
+		'detail.ju.taobao.com',
 		'www.zhe800.com',
+		'brand.zhe800.com',
+		'search.zhe800.com',
+		'auction1.paipai.com',
+		's.paipai.com',
 		'www.paipai.com'
 	];
 	for (var i = 0; i < domain.length; i++) {

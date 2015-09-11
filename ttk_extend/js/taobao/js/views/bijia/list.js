@@ -1,3 +1,6 @@
+/**
+ * 首页list页交互！
+ */
 __tk__define(function (require, exports, module) {
 	var $ = require("../../lib/jquery"),
 		_ = require("../../lib/underscore"),
@@ -9,6 +12,12 @@ __tk__define(function (require, exports, module) {
 		model = require("../../models/models");
 
 	require("../../mustache_helpers");
+	function getTpl() {
+		if (utils.isJuzi()) {
+			return templates["juzi/home.list"];
+		}
+		return templates["bijia/home.list"];
+	}
 	module.exports = {
 		init: function () {
 			tts_stat.init();
@@ -30,7 +39,7 @@ __tk__define(function (require, exports, module) {
 
 		$el: null,
 
-		template: templates["bijia/home.list"],
+		template: getTpl(),
 
 		viewDeferred: new $.Deferred(),
 
@@ -78,7 +87,7 @@ __tk__define(function (require, exports, module) {
 			 });*/
 			self.renderBanner();
 		},
-		renderBanner: function (data) {
+		renderBanner: function () {
 			//var tpl = templates["bijia/banner"];
 			//var tpl = '<iframe frameborder="0" marginheight="0" marginwidth="0" border="0" scrolling="no" width="260" height="70" src="http://show.kc.taotaosou.com/brand.do?brandKeyword=&keyword=&brandItemSize=2&keywordType=true&source=382&brandRandom=100&adType=2&itemSize=1&height=70&width=260"></iframe>';
 			//this.$el.find(".TTS-banner-wrap").empty().append(tpl({list: data}));
@@ -99,24 +108,38 @@ __tk__define(function (require, exports, module) {
 		attachViewEvent: function () {
 			var self = this;
 
-			// 比价框展开收起按钮
-			$("body").on("click", ".TTS-bijia-min-btn", function () {
-				if ($(this).hasClass("bijia-fold")) {
-					tts_stat.trackEvent("Bottomtab_shorten_click");
-				} else {
-					tts_stat.trackEvent("Bottomtab_stretch_click");
-				}
-				$(this).toggleClass("bijia-fold bijia-unfold");
-				self.$el.toggleClass("bijia-min", $(this).hasClass("bijia-unfold"));
-				self.$el.find(".TTS_logo_bijia").toggleClass("bijia-unlogo", $(this).hasClass("bijia-unfold"));
-			});
+			if (utils.isJuzi()) {
+				// 比价框展开收起按钮 juzi浏览器情况！
+				$("body").on("click", ".TTS-bijia-min-btn", function () {
+					if ($(this).hasClass("juzi-fold")) {
+						tts_stat.trackEvent("Bottomtab_shorten_click");
+					} else {
+						tts_stat.trackEvent("Bottomtab_stretch_click");
+					}
+					$(this).toggleClass("juzi-fold juzi-unfold");
+					self.$el.toggleClass("juzi-min", $(this).hasClass("juzi-unfold"));
+					self.$el.find(".TTS_logo_bijia").toggleClass("juzi-unlogo", $(this).hasClass("juzi-unfold"));
+				});
+			} else {
+				// 比价框展开收起按钮
+				$("body").on("click", ".TTS-bijia-min-btn", function () {
+					if ($(this).hasClass("bijia-fold")) {
+						tts_stat.trackEvent("Bottomtab_shorten_click");
+					} else {
+						tts_stat.trackEvent("Bottomtab_stretch_click");
+					}
+					$(this).toggleClass("bijia-fold bijia-unfold");
+					self.$el.toggleClass("bijia-min", $(this).hasClass("bijia-unfold"));
+					self.$el.find(".TTS_logo_bijia").toggleClass("bijia-unlogo", $(this).hasClass("bijia-unfold"));
+				});
+			}
 
 			// 更多同款按钮点击
-			$("body").one("click", ".TTS-bijia-more-btn", function () {
+			/*$("body").one("click", ".TTS-bijia-more-btn", function () {
 				if ($(this).hasClass("bijia-more-like-unclicked")) {
 					$(this).removeClass("bijia-more-like-unclicked").addClass("bijia-more-like-clicked");
 				}
-			});
+			});*/
 
 
 			// 同款/推荐list商品弹出浮层
@@ -170,7 +193,12 @@ __tk__define(function (require, exports, module) {
 		renderSameView: function (data, isUpdate) {
 			var context,
 				self = this,
-				proListTmpl = templates["bijia/home.list.item"];
+				proListTmpl = function () {
+					if (utils.isJuzi()) {
+						return templates["juzi/home.list.item"];
+					}
+					return templates["bijia/home.list.item"];
+				}();
 
 			if (data.proList.length) {
 				if (data.proList.length) {
@@ -253,10 +281,10 @@ __tk__define(function (require, exports, module) {
 		// list商品失去焦点
 		blurProduct: function ($product) {
 			$product.find(".TTS-list-product-detail").removeClass("highlight");
-		},
+		}
 
 		// 显示倒计时
-		countdown: function ($timer) {
+		/*countdown: function ($timer) {
 			var timeDate = $timer.data();
 
 			$timer.countdown(timeDate.start, timeDate.end).on('update.countdown', function (event) {
@@ -266,6 +294,6 @@ __tk__define(function (require, exports, module) {
 			}).on('upfinish.countdown', function (event) {
 				$timer.html(event.strftime('活动结束'));
 			});
-		}
+		}*/
 	};
 });
